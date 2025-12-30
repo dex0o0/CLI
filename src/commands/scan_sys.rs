@@ -69,7 +69,7 @@ impl Sysinfo {
         //self.name_user = sys_info.distribution;
         
         //Save data in json
-        let _ = self.save_to_json("SystemIndo.json");
+        // let _ = self.save_to_json("SystemIndo.json");
         Ok(())
     }
     pub fn save_to_json(&self,filename:&str)->Result<(),Box<dyn std::error::Error>>{
