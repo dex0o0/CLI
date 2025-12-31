@@ -72,6 +72,7 @@ impl Sysinfo {
         // let _ = self.save_to_json("SystemIndo.json");
         Ok(())
     }
+    #[allow(dead_code)]
     pub fn save_to_json(&self,filename:&str)->Result<(),Box<dyn std::error::Error>>{
         let json = serde_json::to_string_pretty(self)?;
         fs::write(filename, json)?;
@@ -116,11 +117,13 @@ pub struct CPUINFO{
     sys:System,
 }
 impl CPUINFO{
+    #[allow(dead_code)]
     pub fn new() -> Self {
         let refresh_kind=RefreshKind::everything();
         let sys = System::new_with_specifics(refresh_kind);
         Self { sys: sys }  
     }
+    #[allow(dead_code)]
     pub fn get_cpu_usage(&mut self) -> f32{
         self.sys.refresh_all();
 
@@ -151,7 +154,7 @@ impl CPUINFO{
 
 
 
-
+#[allow(dead_code)]
 pub fn physical_mem_stats()-> Option<f64>{
     if let Some(usege) = memory_stats(){
         Some(( usege.physical_mem as f64  / 1024.0 ).try_into().unwrap())
@@ -160,6 +163,7 @@ pub fn physical_mem_stats()-> Option<f64>{
         None
     }
 }
+#[allow(dead_code)]
 pub fn virtual_mem_stats()-> Option<f64>{
     if let Some(usege) = memory_stats(){
         Some((usege.virtual_mem as f64 / 1024.0 ).try_into().unwrap())
@@ -167,6 +171,7 @@ pub fn virtual_mem_stats()-> Option<f64>{
         None
     }
 }
+#[allow(dead_code)]
 pub fn total_mem_stats(phy:f64,vir:f64)-> Option<f64>{
     let total = phy + vir;
     Some(total)

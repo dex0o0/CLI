@@ -1,12 +1,8 @@
 mod commands;
-use std::{fmt::Display, result};
-use commands::scan_sys;
-use serde::de;
 use tokio;
-use clap::{Parser,Subcommand, builder::Str};
+use clap::{Parser,Subcommand};
 use anyhow::{Ok, Result};
-use env::current_dir;
-use std::process::Command;
+use commands::command::*;
 
 
 #[derive(Parser)]
@@ -56,61 +52,5 @@ async fn main()-> Result<()>{
         },
     }
 
-    Ok(())
-}
-
-fn list_network(){
-    let out = Command::new("nmcli")
-    .arg("device")
-    .arg("wifi")
-    .arg("list")
-    .output()
-    .expect("Error from run command  \'--show\'");
-
-    if out.status.success(){
-        let result = String::from_utf8_lossy(&out.stdout);
-        println!("{}",result);
-    }
-}
-fn disconnect(device_name:String){
-    let out = Command::new("nmcli")
-    .arg("connection")
-    .output()
-    .expect("Error from get output \"nmcli connectin\"");
-    
-    if out.status.success(){
-        let output_str = String::from_utf8_lossy(&out.stdout);
-        for line in output_str.lines(){
-            let columns:Vec<&str> = line.split_whitespace().collect();
-            if columns.len() >= 4{
-                let device = columns[3];
-                if device_name == device {
-                    let name_connection=columns[0];
-                    let out_disconnect = Command::new("nmcli")
-                    .arg("connection")
-                    .arg("down")
-                    .arg(&name_connection)
-                    .output()
-                    .expect("Error from disconnecting..");
-                    println!("{}",String::from_utf8_lossy(&out_disconnect.stdout));
-                }
-            }
-        }
-    }
-}
-fn connet_to_wifi(name:String){
-    let out = Command::new("nmcli")
-    .arg("device")
-    .arg("wifi")
-    .arg("connect")
-    .arg(name)
-    .output()
-    .expect("Error from connect to wifi");
-    println!("{:?}",out);
-}
-fn scan_status()-> Result<()>{
-    let mut sysinfo = scan_sys::Sysinfo::new();
-    sysinfo.auto_fill().expect("Error auto fill data");
-    sysinfo.display();
     Ok(())
 }
