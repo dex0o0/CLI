@@ -1,6 +1,6 @@
-#**CLI**
-##*kali cli*
-###*اولین پروژه cli من _
+# **CLI**
+## *kali cli*
+### *اولین پروژه cli من _
 
 ![rust logo](https://img.shields.io/badge/rust-1.70+-blue?logo=rust)
 ![linux logo](https://img.shields.io/badge/Linux-supported-green?logo=linux)
@@ -13,7 +13,7 @@
 
 **how to install**
 for install on linux type in terminal 
->برای نصب این دستورات رو در ترمینال وارد کنید
+> برای نصب این دستورات رو در ترمینال وارد کنید
 
 ```bash
 cd "address clone git"/kali
@@ -30,5 +30,5 @@ kali --version
 
 
 **thank you**
-*made by Rust_
-*LICENSE MIT*
+* made by Rust _
+* LICENSE MIT *
