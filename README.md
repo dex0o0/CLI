@@ -1,6 +1,6 @@
 # **CLI**
 ## *kali cli*
-### *اولین پروژه cli من
+### اولین پروژه cli من
 
 ![rust logo](https://img.shields.io/badge/rust-1.70+-blue?logo=rust)
 ![linux logo](https://img.shields.io/badge/Linux-supported-green?logo=linux)
@@ -8,7 +8,9 @@
 
 
 <br>
-[my_git_hub](https://github.com/dex0o0)
+
+[my_git_hub](https://github.com/dex0o0 "my_git_hub")
+
 <br>
 
 **how to install**
