@@ -1,7 +1,10 @@
 [package]
 name = "kali"
 version = "0.1.0"
-edition = "2024"
+edition = "2026"
+authors = ["dex0o0"]
+license = "MIT"
+description = "a cool cli for linux users"
 
 [dependencies]
 anyhow = "1.0.100"
