@@ -4,10 +4,9 @@
 
 ![bash logo](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
 ![rust logo](https://img.shields.io/badge/rust-1.70+-blue?logo=rust)
+![rust](https://rust-lang.org/static/images/rust-logo-blk.svg)
 ![linux logo](https://img.shields.io/badge/Linux-supported-green?logo=linux)
 
-<br>
-<hr>
 
 [my_git_hub](https://github.com/dex0o0 "my_git_hub")
 
@@ -23,6 +22,7 @@ chmod +x install.sh
 ./install.sh #run file install
 ```
 **how to use**
+> با زدن این کد میتوانید دستور عمل های کد رو بخونید
 ```bash
 kali --help
 kali --version

@@ -12,3 +12,6 @@ fi
 if [ $shell == "/usr/bin/bash" ];then
     echo "alias kali=$pwd/kali">>~/.bashrc
 fi
+
+cd $pwd || return
+chmod +x ./kali
