@@ -13,7 +13,7 @@
 
 **how to install**
 for install on linux type in terminal 
->برای نصب این دستورات رو در ترمینال وارد کنید
+> برای نصب این دستورات رو در ترمینال وارد کنید
 
 ```bash
 cd "address clone git"/kali
@@ -30,5 +30,5 @@ kali --version
 
 
 **thank you**
-* made by Rust
-* LICENSE MIT _
+*made by Rust_
+*LICENSE MIT*
