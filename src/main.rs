@@ -8,7 +8,7 @@ use commands::command::*;
 #[derive(Parser)]
 #[command(name = "kali")]
 #[command(version = "0.1.0")]
-#[command(about = "cli for easyli")]
+#[command(about = "cli for easier\nuse as tools and easier\n\"made by dex0o0\"\tgit hub:\"https://github.com/dex0o0\"")]
 struct  Cli{
     #[command(subcommand)]
     commad:Commands,
