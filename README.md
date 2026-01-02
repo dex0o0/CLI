@@ -26,12 +26,36 @@ chmod +x install.sh
 kali --help
 kali --version
 ```
+> command wifi
+```bash
+kali wifi list
+kali wifi connect <name_wifi>
+kali wifi disconnect <name_wirless>
+```
+> command status
+```bash
+kali status
 
+
+┌──(kali㉿kali)
+└─$ kali status                  
+name_os: Kali GNU/Linux
+kernel: 6.16.8+kali-amd64
+hostname: kali
+memory_size_as_mb: 15869
+cpu_brand: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
+gpu: NVIDIA GeForce GTX 960M
+gpu_brand: GeForce
+gpu_memory_as_mb: 4096
+gpu_temperatuer_celsius: 43
+```
 
 <br>
 
 
 [my_git_hub](https://github.com/dex0o0 "github")
+
+
 **thank you**
 * made by Rust 
 * LICENSE MIT 
