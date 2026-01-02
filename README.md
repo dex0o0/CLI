@@ -29,7 +29,8 @@ kali --version
 ```bash
 kali wifi list
 kali wifi connect <name_wifi>
-kali wifi disconnect <name_wirless>
+kali wifi connection
+kali wifi disconnect <name_wifi>
 ```
 > command status
 ```bash
