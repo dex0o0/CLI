@@ -7,8 +7,7 @@
 ![rust](https://rust-lang.org/static/images/rust-logo-blk.svg)
 ![linux logo](https://img.shields.io/badge/Linux-supported-green?logo=linux)
 
-
-[my_git_hub](https://github.com/dex0o0 "my_git_hub")
+این برنامه با اسم kali ساخته شده برای کسانی که از توزیع کالی لینوکس استفاده میکنند این cli میتواند در برخی از موارد سرعت شما را بالا ببرد و در وقت شما سرفه جویی شود.\
 
 <br>
 
@@ -32,6 +31,7 @@ kali --version
 <br>
 
 
+[my_git_hub](https://github.com/dex0o0 "github")
 **thank you**
 * made by Rust 
 * LICENSE MIT 
