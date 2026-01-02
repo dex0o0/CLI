@@ -2,12 +2,12 @@
 ## *kali cli*
 ### اولین پروژه cli من
 
+![bash logo](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
 ![rust logo](https://img.shields.io/badge/rust-1.70+-blue?logo=rust)
 ![linux logo](https://img.shields.io/badge/Linux-supported-green?logo=linux)
-![bash logo](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
-
 
 <br>
+<hr>
 
 [my_git_hub](https://github.com/dex0o0 "my_git_hub")
 
@@ -27,6 +27,7 @@ chmod +x install.sh
 kali --help
 kali --version
 ```
+
 
 <br>
 
