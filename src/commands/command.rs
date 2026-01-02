@@ -26,15 +26,18 @@ pub fn disconnect(device_name:String){
             let columns:Vec<&str> = line.split_whitespace().collect();
             if columns.len() >= 4{
                 let device = columns[3];
+                println!("{}",&device);
                 if device_name == device {
                     let name_connection=columns[0];
-                    let out_disconnect = Command::new("nmcli")
+                    match Command::new("nmcli")
                     .arg("connection")
                     .arg("down")
                     .arg(&name_connection)
-                    .output()
-                    .expect("Error from disconnecting..");
-                    println!("{}",String::from_utf8_lossy(&out_disconnect.stdout));
+                    .output(){
+                        Ok(output) => println!("{}",String::from_utf8_lossy(&output.stdout)) ,
+                        Err(e)=> println!("Error:{}",e),
+                    }
+
                 }
             }
         }
