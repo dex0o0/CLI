@@ -1,4 +1,9 @@
-# **CLI**
+<div align="center">
+
+    # **CLI**
+
+</div>
+
 ## *kali cli*
 ### اولین پروژه cli من
 
@@ -32,5 +37,5 @@ kali --version
 
 
 **thank you**
-* made by Rust _
-* LICENSE MIT *
+* made by Rust 
+* LICENSE MIT 
