@@ -2,5 +2,5 @@
 
 cargo build --release
 pwd=$(pwd)
-cd $pwd/target/release
+cd $pwd/target/release || return
 cp ./kali $pwd
