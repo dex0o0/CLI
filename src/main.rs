@@ -32,6 +32,7 @@ enum WifiAction{
         #[arg(value_name = "NETWORK_NAME")]
         name:String
     },
+    Connection,
     Disconnect{
         #[arg(value_name = "NETWORK_DEVICE", default_value = "wlan0")]
         device_name:String,
@@ -48,7 +49,8 @@ async fn main()-> Result<()>{
                WifiAction::List => {list_network();},
                WifiAction::Connect { name } => {connet_to_wifi(name);},
                 WifiAction::Disconnect { device_name } => {disconnect(device_name);},
-           }
+                WifiAction::Connection => {connection();},
+            }
         },
     }
 

@@ -14,32 +14,28 @@ pub fn list_network(){
         println!("{}",result);
     }
 }
-pub fn disconnect(device_name:String){
+pub fn connection(){
+    match Command::new("nmcli")
+    .arg("connection")
+    .output() {
+        Ok(o) => println!("{}",String::from_utf8_lossy(&o.stdout)),
+        Err(e)=> eprintln!("Error:{}",e)
+    }
+}
+pub fn disconnect(wifi_name:String){
     let out = Command::new("nmcli")
     .arg("connection")
     .output()
     .expect("Error from get output \"nmcli connectin\"");
     
     if out.status.success(){
-        let output_str = String::from_utf8_lossy(&out.stdout);
-        for line in output_str.lines(){
-            let columns:Vec<&str> = line.split_whitespace().collect();
-            if columns.len() >= 4{
-                let device = columns[3];
-                println!("{}",&device);
-                if device_name == device {
-                    let name_connection=columns[0];
-                    match Command::new("nmcli")
-                    .arg("connection")
-                    .arg("down")
-                    .arg(&name_connection)
-                    .output(){
-                        Ok(output) => println!("{}",String::from_utf8_lossy(&output.stdout)) ,
-                        Err(e)=> println!("Error:{}",e),
-                    }
-
-                }
-            }
+        match Command::new("nmcli")
+        .arg("connection")
+        .arg("down")
+        .arg(&wifi_name)
+        .output() {
+            Ok(val)=> println!("{}",String::from_utf8_lossy(&val.stdout)) ,
+            Err(e)=> eprintln!("Error:{}",e), 
         }
     }
 }
