@@ -1,9 +1,4 @@
-<div align="center">
-
-    # **CLI**
-
-</div>
-
+# **CLI**
 ## *kali cli*
 ### اولین پروژه cli من
 
