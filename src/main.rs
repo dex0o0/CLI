@@ -1,8 +1,9 @@
 mod commands;
+use commands::command::*;
+use commands::monitoring;
 use tokio;
 use clap::{Parser,Subcommand};
 use anyhow::{Ok, Result};
-use commands::command::*;
 
 
 #[derive(Parser)]
@@ -24,6 +25,7 @@ enum Commands {
        #[command(subcommand)]
        action:WifiAction,
     },
+    Monitoring,
 }
 #[derive(Subcommand)]
 enum WifiAction{
@@ -52,6 +54,7 @@ async fn main()-> Result<()>{
                 WifiAction::Connection => {connection();},
             }
         },
+        Commands::Monitoring => {monitoring::add_path_log();},
     }
 
     Ok(())
