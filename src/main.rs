@@ -54,7 +54,7 @@ async fn main()-> Result<()>{
                 WifiAction::Connection => {connection();},
             }
         },
-        Commands::Monitoring => {monitoring::add_path_log();},
+        Commands::Monitoring => {todo!()},
     }
 
     Ok(())

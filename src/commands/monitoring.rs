@@ -10,12 +10,12 @@ struct Logs{
     monitorng:bool,
 }
 impl Logs {
-    fn new(&mut self)->Self{
-        let count = cunt_line_log();
-        for _ in count{
+    // fn new(&mut self)->Self{
+    //     let count = cunt_line_log();
+    //     for _ in count{
             
-        }
-    }
+    //     }
+    // }
 }
 struct StackLog{
     path:&'static str,
