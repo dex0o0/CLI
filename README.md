@@ -34,10 +34,6 @@ dex wifi disconnect <name_wifi>&
 ```
 > command status
 ```bash
-dex status&
-
-
-
 └─$ dex status&                  
 name_os: dex GNU/Linux
 kernel: 6.16.8+dex-amd64
