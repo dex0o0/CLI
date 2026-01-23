@@ -7,7 +7,7 @@ use anyhow::{Ok, Result};
 
 
 #[derive(Parser)]
-#[command(name = "kali")]
+#[command(name = "dex")]
 #[command(version = "0.1.0")]
 #[command(about = "cli for easier\nuse as tools and easier\n\"made by dex0o0\"\tgit hub:\"https://github.com/dex0o0\"")]
 struct  Cli{
@@ -21,12 +21,17 @@ struct  Cli{
 #[derive(Subcommand)]
 enum Commands {
     Status,
+    Git,
+    Gmail,
+    Youtube,
     Wifi{
        #[command(subcommand)]
        action:WifiAction,
     },
     Monitoring,
+    Codemod,
 }
+
 #[derive(Subcommand)]
 enum WifiAction{
     List,
@@ -55,6 +60,14 @@ async fn main()-> Result<()>{
             }
         },
         Commands::Monitoring => {todo!()},
+        Commands::Git => {open_git().await},
+        Commands::Youtube => {open_youtube_music().await},
+        Commands::Gmail => {open_gmail().await},
+        Commands::Codemod => {
+            open_git().await;
+            open_gmail().await;
+            open_youtube_music().await;
+        },
     }
 
     Ok(())

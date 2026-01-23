@@ -50,7 +50,7 @@ impl Sysinfo {
         
         //auto fill System info
         let sys_info = Machine::new().system_info();
-        self.name_os = sys_info.os_name ;
+        self.name_os = sys_info.os_name;
         self.cpu_brand = sys_info.processor.brand;
         self.hostname = sys_info.hostname;
         self.kernel = sys_info.kernel_version;
