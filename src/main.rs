@@ -30,6 +30,11 @@ enum Commands {
     },
     Monitoring,
     Codemod,
+    Notif{
+        title:String,
+        body:String,
+        time:String,
+    },
 }
 
 #[derive(Subcommand)]
@@ -68,6 +73,7 @@ async fn main()-> Result<()>{
             open_gmail().await;
             open_youtube_music().await;
         },
+        Commands::Notif => {notif().await},
     }
 
     Ok(())
