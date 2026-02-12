@@ -10,11 +10,16 @@ description = "a cool cli for linux users"
 anyhow = "1.0.100"
 clap = {version = "4.5.53" , features = ["derive","cargo"]}
 colored = "3.0.0"
+dirs = "6.0.0"
 env = "1.0.1"
 machine-info = "1.0.9"
 memory-stats = "1.2.0"
+openssl-sys = "0.9.111"
+regex = "1.12.3"
+#request = "0.0.8"
 serde = "1.0.228"
 serde_json = "1.0.148"
 sysinfo = "0.37.2"
 tabled = { version = "0.20", features = ["derive"] }
 tokio = { version = "1", features = ["full"] }
+url = "2.5.8"

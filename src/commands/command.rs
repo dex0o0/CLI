@@ -2,6 +2,16 @@ use std::process::Command;
 use anyhow::Result;
 use std::path::PathBuf;
 use super::scan_sys;
+use super::extractLinks::*;
+
+
+pub fn download(chat:String){
+    let new = Link::new();
+    let link = Link::extract(&chat);
+    
+
+}
+
 pub fn list_network(){
     let out = Command::new("nmcli")
     .arg("device")
@@ -93,4 +103,14 @@ pub async fn open_youtube_music(){
     .arg(script)
     .output()
     .expect("Error from run script open youtube.music");
+}
+pub fn notif_send(title:String,body:String,time:String){
+    let script = ch_adress("src/scripts/notif.sh");
+    let _ = Command::new("sh")
+    .arg(script)
+    .arg(title)
+    .arg(body)
+    .arg(time)
+    .output()
+    .expect("Error from run notif.sh");
 }
