@@ -22,19 +22,19 @@ chmod +x install.sh
 **how to use**
 > با زدن این کد میتوانید دستور عمل های کد رو بخونید
 ```bash
-dex --help&
-dex --version&
+dex --help
+dex --version
 ```
 > command wifi
 ```bash
-dex wifi list&
-dex wifi connect <name_wifi>&
-dex wifi connection&
-dex wifi disconnect <name_wifi>&
+dex wifi list
+dex wifi connect <name_wifi>
+dex wifi connection
+dex wifi disconnect <name_wifi>
 ```
 > command status
 ```bash
-└─$ dex status&                  
+└─$ dex status                  
 name_os: dex GNU/Linux
 kernel: 6.16.8+dex-amd64
 hostname: dex
@@ -52,6 +52,4 @@ gpu_temperatuer_celsius: 43
 [my_git_hub](https://github.com/dex0o0 "github")
 
 
-**thank you**
-* made by Rust 
-* LICENSE MIT 
+**LICENSE MIT**
