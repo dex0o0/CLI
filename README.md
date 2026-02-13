@@ -49,7 +49,7 @@ gpu_temperatuer_celsius: 43
 <br>
 
 
-[my_git_hub](https://github.com/dex0o0 "github")
+<img src="https://avatars.githubusercontent.com/u/192888708?v=4" width="50px">[my_git_hub](https://github.com/dex0o0 "github")
 
 
 **LICENSE MIT**
