@@ -6,7 +6,7 @@
 ![rust logo](https://img.shields.io/badge/rust-1.70+-blue?logo=rust)
 ![linux logo](https://img.shields.io/badge/Linux-supported-green?logo=linux)
 
-این برنامه با اسم dex ساخته شده برای کسانی که از توزیع کالی لینوکس استفاده میکنند این cli میتواند در برخی از موارد سرعت شما را بالا ببرد و در وقت شما سرفه جویی شود.\
+
 
 <br>
 
