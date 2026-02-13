@@ -1,6 +1,6 @@
 # **CLI**
 ## *dex cli*
-### اولین پروژه cli من
+### اولین پروژه CLI من
 
 ![bash logo](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
 ![rust logo](https://img.shields.io/badge/rust-1.70+-blue?logo=rust)
