@@ -19,8 +19,8 @@ if [ ! "$shell_rc" ];then
   touch "$shell_rc"
 fi
 echo "check file:$shell_rc"
-if ! grep -q "alias dex='exec $binary_path'" "$shell_rc";then
-  echo "alias dex='exec $binary_path'">>"$shell_rc"
+if ! grep -q "alias dex='$binary_path'" "$shell_rc";then
+  echo "alias dex='$binary_path'">>"$shell_rc"
   echo "added"
 else
   echo "alredy exists config in $shell_rc"

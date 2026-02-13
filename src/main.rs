@@ -77,6 +77,6 @@ async fn main()-> Result<()>{
             notif_send(title,body,time);
         },
     }
-
+    std::process::exit(0);
     Ok(())
 }

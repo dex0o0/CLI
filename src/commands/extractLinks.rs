@@ -1,13 +1,15 @@
-use regex::Regex;
+use regex::Regex as Re;
 use std::io::Result;
 use tokio;
+
 #[derive(Debug,Clone)]
 pub struct Link{
-    link:String,
-    category:
+    pub string:String,
+    pub category:LinkCategory,
 }
+
 #[derive(Debug,Clone,PartialEq)]
-enum LinkCategory{
+pub enum LinkCategory{
     Http,
     Https,
     Magnet,
@@ -16,11 +18,11 @@ enum LinkCategory{
     Unknown,
 }
 impl Link{
-    pub fn new(&mut self)->Self{
-        let cat = Self::category(&self.url);
-        Self{
-            link:String::new(),
-            category:cat,
+    pub fn new(url:&str) -> Self{
+        let categor = Self::category(&url);
+        Link{
+            string: url.to_string(),
+            category:categor,
         }
     }
     fn category(url:&str) ->LinkCategory {
@@ -29,11 +31,11 @@ impl Link{
             (r"^magnet:\?",LinkCategory::Magnet),
             (r"\.torrent$",LinkCategory::Torrent),
             (r"^(file|/|\./|\.\./)",LinkCategory::File),
-        ]
+        ];
         for (pattern,category) in patterns.iter(){
-            let re = Regex::new{pattern}.expect{"Err from regex pattern"};
+             let re = Re::new(pattern).unwrap();
             if re.is_match(url){
-                category.clone()
+                return category.clone()
             }
         }
         LinkCategory::Unknown
@@ -46,13 +48,13 @@ impl Link{
     pub fn extract(&self) -> Option<String>{
         match self.category {
             LinkCategory::Http | LinkCategory::Https => {
-                let re = Regex::new(r"https?://([^/]+)").ok()?;
-                re.captures(&self.url)
+                let re = Re::new(r"https?://([^/]+)").ok()?;
+                re.captures(&self.string)
                 .map(|caps| caps[1].to_string())
             }
             LinkCategory::Magnet =>{
-                let re = Regex::new(r"btih:([0-9a-fA-F])+").ok()?;
-                re.captures(&self.url)
+                let re = Re::new(r"btih:([0-9a-fA-F])+").ok()?;
+                re.captures(&self.string)
                 .map(|caps| format!("Magnet:{}",&caps[1][..8]))
             }
             _ => None,

@@ -5,12 +5,12 @@ use super::scan_sys;
 use super::extractLinks::*;
 
 
-pub fn download(chat:String){
-    let new = Link::new();
-    let link = Link::extract(&chat);
+// pub fn download(chat:String){
+//     let new = Link::new();
+//     let link = Link::extract(&chat);
     
 
-}
+// }
 
 pub fn list_network(){
     let out = Command::new("nmcli")
