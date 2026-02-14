@@ -1,11 +1,16 @@
-mod commands;
+mod commands{
+    pub mod dl;
+    pub mod extractLinks;
+    pub mod monitoring;
+    pub mod command;
+    pub mod scan_sys;
+}
 use commands::command::*;
 use commands::monitoring;
+use commands::dl;
 use tokio;
 use clap::{Parser,Subcommand};
 use anyhow::{Ok, Result};
-
-
 #[derive(Parser)]
 #[command(name = "dex")]
 #[command(version = "0.1.034")]
@@ -34,6 +39,9 @@ enum Commands {
         title:String,
         body:String,
         time:String,
+    },
+    Dl{
+        url:String,
     },
 }
 
@@ -75,6 +83,11 @@ async fn main()-> Result<()>{
         },
         Commands::Notif{title,body,time} => {
             notif_send(title,body,time);
+        },
+        Commands::Dl { url } => {
+            if let Err(e) = commands::dl::download(&url).await{
+                eprintln!("Error:{}",e);
+            }
         },
     }
     Ok(())

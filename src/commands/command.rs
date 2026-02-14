@@ -1,9 +1,7 @@
 use std::process::Command;
 use anyhow::Result;
 use std::path::PathBuf;
-use super::scan_sys;
-use super::extractLinks::*;
-
+use crate::commands::scan_sys;
 
 // pub fn download(chat:String){
 //     let new = Link::new();
