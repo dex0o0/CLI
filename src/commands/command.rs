@@ -1,3 +1,4 @@
+use core::fmt;
 use std::process::Command;
 use anyhow::Result;
 use std::path::PathBuf;
@@ -49,14 +50,19 @@ pub fn disconnect(wifi_name:String){
     }
 }
 pub fn connet_to_wifi(name:String){
-    let out = Command::new("nmcli")
+    let out= Command::new("nmcli")
     .arg("device")
     .arg("wifi")
     .arg("connect")
     .arg(name)
     .output()
     .expect("Error from connect to wifi");
-    println!("{:?}",out);
+    let status = String::from(format!("{:?}",out.status));
+    if status == "exit status 0"{
+        println!("connected");
+    }else {
+        println!("failed connecting");
+    }
 }
 pub fn scan_status()-> Result<()>{
     let mut sysinfo = scan_sys::Sysinfo::new();
@@ -88,19 +94,19 @@ pub async fn open_git(){
     .arg(script)
     .output().expect("Error from run script open git");
 }
-pub async fn open_gmail(){
-    let script = ch_adress("src/scripts/gmail.sh");
-    let _ = Command::new("sh")
-    .arg(script)
-    .output()
-    .expect("Error from run script open gmail");
+
+pub async fn open_gmail()->Result<()>{
+    let _ = Command::new("google-chrome-stable")
+    .args(["--app=https://accounts.google.com/b/0/AddMailService"," --start-fullscreen ","--new-window"])
+    .output();
+    Ok(())
 }
-pub async fn open_youtube_music(){
-    let script = ch_adress("src/scripts/youtube.music.sh");
-    let _ = Command::new("sh")
-    .arg(script)
-    .output()
-    .expect("Error from run script open youtube.music");
+
+pub async fn open_youtube_music()-> Result<()>{
+    let _ = Command::new("google-chrome-stable")
+    .args(["--app=https://music.youtube.com/"," --start-fullscreen"," --new-window"])
+    .output();
+    Ok(())
 }
 pub fn notif_send(title:String,body:String,time:String){
     let script = ch_adress("src/scripts/notif.sh");
@@ -111,4 +117,11 @@ pub fn notif_send(title:String,body:String,time:String){
     .arg(time)
     .output()
     .expect("Error from run notif.sh");
+}
+
+pub async fn github()-> Result<()>{
+    let _ = Command::new("google-chrome-stable")
+    .args( ["--app=https://github.com/"," --start-fullscreen", "--new-window"])
+    .output();
+    Ok(())
 }

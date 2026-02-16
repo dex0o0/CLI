@@ -1,5 +1,6 @@
 use super::extractLinks::Link;
 use anyhow::{anyhow,Result};
+use colored::Colorize;
 use dirs::download_dir;
 use futures_util::StreamExt;
 use indicatif::{ProgressBar,ProgressStyle};
@@ -17,24 +18,47 @@ pub async fn download(url:&str)->Result<()>{
         return Err(anyhow!("link invalid:{}",url));
     }
 
-    if let Some(extracted) = link.extract(){
-        println!{"find:{}",extracted};
-    }
+    // if let Some(extracted) = link.extract(){
+    //     println!{"name server:{}",extracted};
+    // }
 
     let filename = extract_filename(&link.string)?;
-    let download_dir = download_dir()
-        .ok_or(anyhow!("directory not found"))?;
-
+    let download_dir = download_dir().ok_or(anyhow!("directory not found"))?;
     let filepath = download_dir.join(&filename);
-    println!("save to:{}",filepath.display());
-
+    println!("{}...","downloading".green());
+    println!("{}:{}","name".green(),filename);
     download_file(&link.string,&filepath).await.unwrap();
+
+    println!("save to:{}",filepath.display());
     
     println!("download completed:{}",filepath.display());
     Ok(())
 }
 
+pub async fn download_with_filename(url:&str,name:&str)->Result<()>{
+       let link = Link::new(url);
+    
+    if !link.is_valid(){
+        return Err(anyhow!("link invalid:{}",url));
+    }
 
+    // if let Some(extracted) = link.extract(){
+    //     println!{"name server:{}",extracted};
+    // }
+
+    let filename = name.to_string();
+    let download_dir = download_dir().ok_or(anyhow!("directory not found"))?;
+    let filepath = download_dir.join(&filename);
+    println!("{}...","downloading".green());
+    println!("{}:{}","name".green(),filename);
+    download_file(&link.string,&filepath).await.expect("Error");
+
+    println!("save to:{}",filepath.display());
+    
+    println!("download completed:{}",filepath.display());
+
+    Ok(())
+}
 
 
 

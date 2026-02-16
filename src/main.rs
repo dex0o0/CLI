@@ -63,8 +63,10 @@ enum Commands {
     
     #[command(name="dl",about="download a link")]
     Dl{
-        #[arg(value_name = "link download")]
+        #[arg(value_name = "link download",short='u',long="url")]
         url:String,
+        #[arg(short='o',long="filename")]
+        name:Option<String>,
     },
     Complation{
         shell:Shell,
@@ -100,20 +102,31 @@ async fn main()-> Result<()>{
         },
         Commands::Monitoring => {todo!()},
         Commands::Git => {open_git().await},
-        Commands::YM => {open_youtube_music().await},
-        Commands::Gmail => {open_gmail().await},
+        Commands::YM => {open_youtube_music().await.expect("failed open youtube music")},
+        Commands::Gmail => {open_gmail().await.expect("Error to open gmail")},
         Commands::Codemod => {
-            open_git().await;
-            open_gmail().await;
-            open_youtube_music().await;
+
+            let _= github().await;
+            let _=open_gmail().await;
+            let _=open_youtube_music().await;
         },
         Commands::Notif{title,body,time} => {
             notif_send(title,body,time);
         },
-        Commands::Dl { url } => {
-            if let Err(e) = commands::dl::download(&url).await{
-                eprintln!("Error:{}",e);
+        Commands::Dl { url,name } => {
+            match name {
+                Some(name)=>{
+                    if let Err(e) = commands::dl::download_with_filename(&url, &name).await{
+                        eprintln!("Error:{}",e);
+                    }
+                }
+                None=>{
+                    if let Err(e) = commands::dl::download(&url).await{
+                        eprintln!("Error:{}",e);
+                    }
+                }
             }
+            
         },
         Commands::Complation { shell } =>{
             let mut cmd = Cli::command();
