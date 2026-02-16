@@ -13,6 +13,7 @@ clap_complete = "4.5.66"
 colored = "3.0"
 dirs = "6.0"
 env = "1.0"
+fs2 = "0.4.3"
 futures-util = "0.3"           # جدید
 indicatif = "0.17"              # جدید
 machine-info = "1.0"

@@ -5,11 +5,15 @@ mod commands{
     pub mod command;
     pub mod scan_sys;
 }
+use std::{any, path::{Path, PathBuf}};
+use colored::{self, Colorize};
 use commands::command::*;
 use tokio;
 use clap::{Parser,Subcommand,CommandFactory};
 use clap_complete::{Generator, Shell, generate};
-use anyhow::{Ok, Result};
+use anyhow::{Ok, Result, anyhow};
+
+use crate::commands::dl::{dl_read_file, download, download_with_filename};
 
 
 #[derive(Parser)]
@@ -63,10 +67,13 @@ enum Commands {
     
     #[command(name="dl",about="download a link")]
     Dl{
-        #[arg(value_name = "link download",short='u',long="url")]
-        url:String,
-        #[arg(short='o',long="filename")]
+        #[arg(value_name = "link download",short='u',long="url",help="| link download")]
+        url:Option<String>,
+        #[arg(short='o',long="filename",help="| set name for file downloaded")]
         name:Option<String>,
+
+        #[arg(short='f',long="file",help="| read link in file")]
+        file:Option<PathBuf>,
     },
     Complation{
         shell:Shell,
@@ -113,20 +120,20 @@ async fn main()-> Result<()>{
         Commands::Notif{title,body,time} => {
             notif_send(title,body,time);
         },
-        Commands::Dl { url,name } => {
-            match name {
-                Some(name)=>{
-                    if let Err(e) = commands::dl::download_with_filename(&url, &name).await{
-                        eprintln!("Error:{}",e);
-                    }
+        Commands::Dl { url,name,file } => {
+           let result = if let Some(file_path) = file {
+                if !file_path.exists(){
+                    return Err(anyhow!("[{}]file dose not exists","ERROR".red()));
                 }
-                None=>{
-                    if let Err(e) = commands::dl::download(&url).await{
-                        eprintln!("Error:{}",e);
-                    }
-                }
-            }
-            
+                dl_read_file(file_path).await.expect("Error");
+           }else if let (Some(url),Some(name)) = (&url,name) {
+                download_with_filename(&url, &name).await.expect("Error");
+           }else if let Some(u) = &url {
+                download(&u).await.expect("Error");
+           }else {
+               eprintln!("option not found please dex dl --help");
+               return Ok(());
+           };
         },
         Commands::Complation { shell } =>{
             let mut cmd = Cli::command();
