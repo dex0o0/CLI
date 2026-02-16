@@ -102,17 +102,6 @@ pub async fn open_youtube_music(){
     .output()
     .expect("Error from run script open youtube.music");
 }
-<<<<<<< HEAD
-pub async fn notif(title:&'static str,body:&'static str,time:&'static str)-> std::io::Result<()>{
-    let dir = current_dir();
-    let mut script = String::new();
-    script = format!("{}/src/scripts/notif.sh",dir.display());
-    let _ = Command::new("sh")
-    .arg(script)
-    .output()
-    .expect("Error from run script notif send");
-    Ok(())
-=======
 pub fn notif_send(title:String,body:String,time:String){
     let script = ch_adress("src/scripts/notif.sh");
     let _ = Command::new("sh")
@@ -122,5 +111,4 @@ pub fn notif_send(title:String,body:String,time:String){
     .arg(time)
     .output()
     .expect("Error from run notif.sh");
->>>>>>> modbr
 }

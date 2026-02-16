@@ -1,12 +1,13 @@
 use regex::Regex as Re;
-use std::io::Result;
-use tokio;
+
+
 
 #[derive(Debug,Clone)]
 pub struct Link{
     pub string:String,
     pub category:LinkCategory,
 }
+
 
 #[derive(Debug,Clone,PartialEq)]
 pub enum LinkCategory{

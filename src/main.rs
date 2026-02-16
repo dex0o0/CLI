@@ -7,12 +7,15 @@ mod commands{
 }
 use commands::command::*;
 use tokio;
-use clap::{Parser,Subcommand};
+use clap::{Parser,Subcommand,CommandFactory};
+use clap_complete::{Generator, Shell, generate};
 use anyhow::{Ok, Result};
+
+
 #[derive(Parser)]
 #[command(name = "dex")]
 #[command(version = "0.1.034")]
-#[command(about = "cli for easier\nuse as tools and easier\n\"made by dex0o0\"\tgit hub:\"https://github.com/dex0o0\"")]
+#[command(about = "CLI for easier\nuse as tools and easier\n\"made by dex0o0\"\tgit hub:\"https://github.com/dex0o0\"")]
 struct  Cli{
     #[command(subcommand)]
     commad:Commands,
@@ -23,23 +26,48 @@ struct  Cli{
 
 #[derive(Subcommand)]
 enum Commands {
+    #[command(name="status",
+    about="show system status",
+    long_about="show data hardware your system\n
+    cpu,gpu,tempreture of gpu,memory,memory use and...",
+    )]
     Status,
+
+    #[command(name="git",about="open main page github")]
     Git,
+
+    #[command(name="gmail",about="open gmail page")]
     Gmail,
-    Youtube,
+
+    #[command(name="ym",about="open youtube music")]
+    YM,
+
+
     Wifi{
        #[command(subcommand)]
        action:WifiAction,
     },
+
+    #[command(name="monitoring",about="switch to monitoring mod")]
     Monitoring,
+
+    #[command(name="codemod",about="switch to coding mod",long_about="open git,gmail and youtube music")]
     Codemod,
+
+    #[command(name="notif",about="set notif for any time")]
     Notif{
         title:String,
         body:String,
         time:String,
     },
+    
+    #[command(name="dl",about="download a link")]
     Dl{
+        #[arg(value_name = "link download")]
         url:String,
+    },
+    Complation{
+        shell:Shell,
     },
 }
 
@@ -72,7 +100,7 @@ async fn main()-> Result<()>{
         },
         Commands::Monitoring => {todo!()},
         Commands::Git => {open_git().await},
-        Commands::Youtube => {open_youtube_music().await},
+        Commands::YM => {open_youtube_music().await},
         Commands::Gmail => {open_gmail().await},
         Commands::Codemod => {
             open_git().await;
@@ -87,6 +115,11 @@ async fn main()-> Result<()>{
                 eprintln!("Error:{}",e);
             }
         },
+        Commands::Complation { shell } =>{
+            let mut cmd = Cli::command();
+            let name = cmd.get_name().to_string();
+            generate(shell, &mut cmd, name, &mut std::io::stdout());
+        }
     }
     Ok(())
 }
