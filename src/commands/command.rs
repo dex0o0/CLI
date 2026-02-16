@@ -1,7 +1,15 @@
 use std::process::Command;
 use anyhow::Result;
 use std::path::PathBuf;
-use super::scan_sys;
+use crate::commands::scan_sys;
+
+// pub fn download(chat:String){
+//     let new = Link::new();
+//     let link = Link::extract(&chat);
+    
+
+// }
+
 pub fn list_network(){
     let out = Command::new("nmcli")
     .arg("device")
@@ -94,6 +102,7 @@ pub async fn open_youtube_music(){
     .output()
     .expect("Error from run script open youtube.music");
 }
+<<<<<<< HEAD
 pub async fn notif(title:&'static str,body:&'static str,time:&'static str)-> std::io::Result<()>{
     let dir = current_dir();
     let mut script = String::new();
@@ -103,4 +112,15 @@ pub async fn notif(title:&'static str,body:&'static str,time:&'static str)-> std
     .output()
     .expect("Error from run script notif send");
     Ok(())
+=======
+pub fn notif_send(title:String,body:String,time:String){
+    let script = ch_adress("src/scripts/notif.sh");
+    let _ = Command::new("sh")
+    .arg(script)
+    .arg(title)
+    .arg(body)
+    .arg(time)
+    .output()
+    .expect("Error from run notif.sh");
+>>>>>>> modbr
 }

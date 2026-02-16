@@ -1,14 +1,17 @@
-mod commands;
+mod commands{
+    pub mod dl;
+    pub mod extractLinks;
+    pub mod monitoring;
+    pub mod command;
+    pub mod scan_sys;
+}
 use commands::command::*;
-use commands::monitoring;
 use tokio;
 use clap::{Parser,Subcommand};
 use anyhow::{Ok, Result};
-
-
 #[derive(Parser)]
 #[command(name = "dex")]
-#[command(version = "0.1.0")]
+#[command(version = "0.1.034")]
 #[command(about = "cli for easier\nuse as tools and easier\n\"made by dex0o0\"\tgit hub:\"https://github.com/dex0o0\"")]
 struct  Cli{
     #[command(subcommand)]
@@ -34,6 +37,9 @@ enum Commands {
         title:String,
         body:String,
         time:String,
+    },
+    Dl{
+        url:String,
     },
 }
 
@@ -73,8 +79,14 @@ async fn main()-> Result<()>{
             open_gmail().await;
             open_youtube_music().await;
         },
-        Commands::Notif => {notif().await},
+        Commands::Notif{title,body,time} => {
+            notif_send(title,body,time);
+        },
+        Commands::Dl { url } => {
+            if let Err(e) = commands::dl::download(&url).await{
+                eprintln!("Error:{}",e);
+            }
+        },
     }
-
     Ok(())
 }

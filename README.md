@@ -1,12 +1,12 @@
 # **CLI**
-## *dex cli*
-### اولین پروژه cli من
+## *dex CLI*
+### اولین پروژه CLI من
 
 ![bash logo](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
 ![rust logo](https://img.shields.io/badge/rust-1.70+-blue?logo=rust)
 ![linux logo](https://img.shields.io/badge/Linux-supported-green?logo=linux)
 
-این برنامه با اسم dex ساخته شده برای کسانی که از توزیع کالی لینوکس استفاده میکنند این cli میتواند در برخی از موارد سرعت شما را بالا ببرد و در وقت شما سرفه جویی شود.\
+
 
 <br>
 
@@ -22,19 +22,19 @@ chmod +x install.sh
 **how to use**
 > با زدن این کد میتوانید دستور عمل های کد رو بخونید
 ```bash
-dex --help&
-dex --version&
+dex --help
+dex --version
 ```
 > command wifi
 ```bash
-dex wifi list&
-dex wifi connect <name_wifi>&
-dex wifi connection&
-dex wifi disconnect <name_wifi>&
+dex wifi list
+dex wifi connect <name_wifi>
+dex wifi connection
+dex wifi disconnect <name_wifi>
 ```
 > command status
 ```bash
-└─$ dex status&                  
+└─$ dex status                  
 name_os: dex GNU/Linux
 kernel: 6.16.8+dex-amd64
 hostname: dex
@@ -49,9 +49,7 @@ gpu_temperatuer_celsius: 43
 <br>
 
 
-[my_git_hub](https://github.com/dex0o0 "github")
+<img src="https://avatars.githubusercontent.com/u/192888708?v=4" width="25px" style="border-radius:99px">[my_git_hub](https://github.com/dex0o0 "github")
 
 
-**thank you**
-* made by Rust 
-* LICENSE MIT 
+**LICENSE MIT**
