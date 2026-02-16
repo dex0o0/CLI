@@ -17,9 +17,6 @@ pub async fn download(url:&str)->Result<()>{
         return Err(anyhow!("link invalid:{}",url));
     }
 
-    println!("link:{}",link.string);
-    println!("category:{:?}",link.category);
-
     if let Some(extracted) = link.extract(){
         println!{"find:{}",extracted};
     }
@@ -31,7 +28,8 @@ pub async fn download(url:&str)->Result<()>{
     let filepath = download_dir.join(&filename);
     println!("save to:{}",filepath.display());
 
-    download_file(&link.string,&filepath);
+    download_file(&link.string,&filepath).await.unwrap();
+    
     println!("download completed:{}",filepath.display());
     Ok(())
 }
