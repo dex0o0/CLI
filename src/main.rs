@@ -4,7 +4,9 @@ mod commands{
     pub mod monitoring;
     pub mod command;
     pub mod scan_sys;
+    pub mod todo;
 }
+use crate::commands::todo::gui;
 use std::{any, path::{Path, PathBuf}};
 use colored::{self, Colorize};
 use commands::command::*;
@@ -51,7 +53,7 @@ enum Commands {
        #[command(subcommand)]
        action:WifiAction,
     },
-    
+
     #[command(name="monitoring",about="switch to monitoring mod")]
     Monitoring,
 
@@ -75,6 +77,7 @@ enum Commands {
         #[arg(short='f',long="file",help="| read link in file")]
         file:Option<PathBuf>,
     },
+    TODO,
     Complation{
         shell:Shell,
     },
@@ -96,7 +99,6 @@ enum WifiAction{
 #[tokio::main]
 async fn main()-> Result<()>{
     let cli = Cli::parse();
-
     match cli.commad {
         Commands::Status => {scan_status().expect("Error from scan your system");},
         Commands::Wifi { action } =>{
@@ -135,6 +137,7 @@ async fn main()-> Result<()>{
                return Ok(());
            };
         },
+        Commands::TODO => {},
         Commands::Complation { shell } =>{
             let mut cmd = Cli::command();
             let name = cmd.get_name().to_string();
