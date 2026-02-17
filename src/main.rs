@@ -46,12 +46,12 @@ enum Commands {
     #[command(name="ym",about="open youtube music")]
     YM,
 
-
+    #[command(name="wifi",about="wifi manager use by pakege 'nmcli'")]
     Wifi{
        #[command(subcommand)]
        action:WifiAction,
     },
-
+    
     #[command(name="monitoring",about="switch to monitoring mod")]
     Monitoring,
 

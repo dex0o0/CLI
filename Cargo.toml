@@ -14,12 +14,14 @@ colored = "3.0"
 dirs = "6.0"
 env = "1.0"
 fs2 = "0.4.3"
-futures-util = "0.3"           # جدید
-indicatif = "0.17"              # جدید
+futures-util = "0.3"          
+glib = "0.21.5"
+gtk4 = {version="0.10.3",package="gtk4"}
+indicatif = "0.17"              
 machine-info = "1.0"
 memory-stats = "1.2"
 regex = "1.12"
-reqwest = { version = "0.11", features = ["rustls-tls", "stream"] }  # جدید
+reqwest = { version = "0.11", features = ["rustls-tls", "stream"] } 
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 sysinfo = "0.37"

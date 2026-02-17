@@ -13,7 +13,7 @@ impl Logs {
     // fn new(&mut self)->Self{
     //     let count = cunt_line_log();
     //     for _ in count{
-            
+        
     //     }
     // }
 }
@@ -41,12 +41,6 @@ impl StackLog {
         }
     }
 }
-
-pub fn monitoring_mode(){
-
-}
-
-
 pub fn add_path_log(name:&'static str,content:String){
     let path = env::current_exe().expect("Error to get path file").parent().expect("").to_path_buf();
     let path_log = path.join("log").join(name);
@@ -97,3 +91,26 @@ fn read_log_file(path:&str)-> Result<String,String> {
     buffer.read_to_string(&mut content).expect("Error to convert to string file");
     Ok(content)
 }
+
+
+
+
+
+
+
+
+/////////main//////////
+///////////////////////
+pub fn monitoring_mode(){
+
+}
+
+
+
+
+
+
+
+
+
+

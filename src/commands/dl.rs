@@ -1,9 +1,6 @@
 use std::result::Result::Ok;
 use fs2::{self, free_space};
-use futures_util::future::ok;
 use tokio::net::TcpStream;
-use crate::Cli;
-
 use super::extractLinks::Link;
 use anyhow::{Result, anyhow};
 use colored::Colorize;
@@ -96,12 +93,12 @@ fn extract_filename(url:&str)->Result<String>{
 }
 /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
+/// 
 pub fn client_build()->reqwest::Client{
         let agent = format!("dex-cli/0.1.0");
         Client::builder()
             .user_agent(agent)
-            .build()
-            .unwrap_or_else(|e|{
+            .build().unwrap_or_else(|e|{
                 eprintln!("[{}] to create client","ERROR".red());
                 Client::new()
             })
@@ -128,7 +125,8 @@ impl DownloadChecker {
             return false;
         }
         let client = client_build();
-        if let Ok(final_url) = Self::handle_redirect(&client, url).await {
+        #[warn(unused_variables)]
+        if let Ok(_e) = Self::handle_redirect(&client, url).await {
             true
         } else {
             false
