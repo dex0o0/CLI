@@ -4,7 +4,9 @@ mod commands{
     pub mod monitoring;
     pub mod command;
     pub mod scan_sys;
+    pub mod todo;
 }
+use crate::commands::todo::gui;
 use std::{any, path::{Path, PathBuf}};
 use colored::{self, Colorize};
 use commands::command::*;
