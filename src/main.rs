@@ -4,6 +4,7 @@ mod commands{
     pub mod monitoring;
     pub mod command;
     pub mod scan_sys;
+    pub mod tui;
 }
 use std::{any, path::{Path, PathBuf}};
 use colored::{self, Colorize};
@@ -13,7 +14,7 @@ use clap::{Parser,Subcommand,CommandFactory};
 use clap_complete::{Generator, Shell, generate};
 use anyhow::{Ok, Result, anyhow};
 
-use crate::commands::dl::{dl_read_file, download, download_with_filename};
+use crate::commands::{dl::{dl_read_file, download, download_with_filename}, tui::TuiApp};
 
 
 #[derive(Parser)]
@@ -98,7 +99,7 @@ enum WifiAction{
 async fn main()-> Result<()>{
     let cli = Cli::parse();
     match cli.commad {
-        Commands::Status => {scan_status().expect("Error from scan your system");},
+        Commands::Status => {scan_status().expect("Error from scan your system");TuiApp::show_status();},
         Commands::Wifi { action } =>{
            match action {
                WifiAction::List => {list_network();},

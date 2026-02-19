@@ -103,7 +103,21 @@ impl Sysinfo {
     field_names.iter()
         .filter_map(|name| field_map.get(name).map(|value| (name, value)))
         .for_each(|(name, value)| println!("{}: {}", name.blue().bold() , value.green()));
-}
+    }
+    pub fn data_vec(&self)->Vec<(String,String)>{
+        let data = vec![
+            ("OS".to_string(),self.name_os.clone()),
+            ("kernel".to_string(),self.kernel.clone()),
+            ("hostname".to_string(),self.hostname.clone()),
+            ("memory".to_string(),format!("{:.2}GB",self.memory_size_as_mb.clone()/1024).to_string()),
+            ("CPU".to_string(),self.cpu_brand.clone()),
+            ("GPU".to_string(),self.gpu.clone()),
+            ("GPU brand".to_string(),self.gpu_brand.clone()),
+            ("GPU memory".to_string(),format!("{:.2}GB",self.gpu_memory_as_mb.clone()/1024).to_string()),
+            ("GPU temperature".to_string(),format!("{}C",self.gpu_temperatuer_celsius.clone()))
+        ];
+        data
+    }
 }
 
 
