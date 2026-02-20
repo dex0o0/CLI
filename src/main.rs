@@ -6,12 +6,12 @@ mod commands{
     pub mod scan_sys;
     pub mod tui;
 }
-use std::{any, path::{Path, PathBuf}};
+use std::{path::{ PathBuf}};
 use colored::{self, Colorize};
 use commands::command::*;
 use tokio;
 use clap::{Parser,Subcommand,CommandFactory};
-use clap_complete::{Generator, Shell, generate};
+use clap_complete::{ Shell, generate};
 use anyhow::{Ok, Result, anyhow};
 
 use crate::commands::{dl::{dl_read_file, download, download_with_filename}, tui::TuiApp};
@@ -99,7 +99,7 @@ enum WifiAction{
 async fn main()-> Result<()>{
     let cli = Cli::parse();
     match cli.commad {
-        Commands::Status => {TuiApp::show_status();},
+        Commands::Status => {let _ = TuiApp::show_status();},
         Commands::Wifi { action } =>{
            match action {
                WifiAction::List => {list_network();},
@@ -122,7 +122,7 @@ async fn main()-> Result<()>{
             notif_send(title,body,time);
         },
         Commands::Dl { url,name,file } => {
-           let result = if let Some(file_path) = file {
+           let _ = if let Some(file_path) = file {
                 if !file_path.exists(){
                     return Err(anyhow!("[{}]file dose not exists","ERROR".red()));
                 }
