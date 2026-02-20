@@ -52,6 +52,7 @@ pub enum Commands {
        #[command(subcommand)]
        action:WifiAction,
     },
+    #[command(name="config",about="config user and save data")]
     Config(ConfArg),
     #[command(name="monitoring",about="switch to monitoring mod")]
     Monitoring,
@@ -147,11 +148,6 @@ async fn main()-> Result<()>{
            };
         },
         Commands::TODO => {},
-        Commands::Complation { shell } =>{
-            let mut cmd = Cli::command();
-            let name = cmd.get_name().to_string();
-            generate(shell, &mut cmd, name, &mut std::io::stdout());
-        },
         Commands::Config(args)=>{
             let mut current_user = conf::load_config(args.global).unwrap_or_else(|_| conf::User::empty());
             if args.key == "user.email"{
@@ -186,12 +182,17 @@ async fn main()-> Result<()>{
                         Err(e)=>eprintln!("[{}]:{}","ERROR".red(),e),
                     }
                 }
-            
+                
             }else {
                 println!("Key '{}' is not supported",args.key.yellow());
             }
-
+            
         }
+        Commands::Complation { shell } =>{
+            let mut cmd = Cli::command();
+            let name = cmd.get_name().to_string();
+            generate(shell, &mut cmd, name, &mut std::io::stdout());
+        },
     }
     Ok(())
 }
