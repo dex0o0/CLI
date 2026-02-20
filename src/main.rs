@@ -19,7 +19,7 @@ use crate::commands::{config::conf::{self, Birthday, Email, Month, save_and_repo
 
 #[derive(Parser)]
 #[command(name = "dex")]
-#[command(version = "0.1.034")]
+#[command(version = "0.1.421")]
 #[command(about = "CLI for easier\nuse as tools and easier\n\"made by dex0o0\"\tgit hub:\"https://github.com/dex0o0\"")]
 struct  Cli{
     #[command(subcommand)]
