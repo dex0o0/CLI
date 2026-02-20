@@ -65,12 +65,15 @@ pub fn connet_to_wifi(name:String){
         println!("failed connecting");
     }
 }
-pub fn scan_status()-> Result<()>{
-    let mut sysinfo = scan_sys::Sysinfo::new();
-    sysinfo.auto_fill().expect("Error auto fill data");
-    sysinfo.display();
-    Ok(())
-}
+
+// #[warn(dead_code)]
+// pub fn scan_status()-> Result<()>{
+//     let mut sysinfo = scan_sys::Sysinfo::new();
+//     sysinfo.auto_fill().expect("Error auto fill data");
+//     sysinfo.display();
+//     Ok(())
+// }
+
 fn current_dir()-> PathBuf{
     let current_dir = env::current_exe()
     .expect("Error from get path binery file")
@@ -110,14 +113,7 @@ pub async fn open_youtube_music()-> Result<()>{
     Ok(())
 }
 pub fn notif_send(title:String,body:String,time:String){
-    let script = ch_adress("src/scripts/notif.sh");
-    let _ = Command::new("sh")
-    .arg(script)
-    .arg(title)
-    .arg(body)
-    .arg(time)
-    .output()
-    .expect("Error from run notif.sh");
+    todo!()
 }
 
 pub async fn github()-> Result<()>{

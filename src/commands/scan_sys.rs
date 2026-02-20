@@ -109,11 +109,11 @@ impl Sysinfo {
             ("OS".to_string(),self.name_os.clone()),
             ("kernel".to_string(),self.kernel.clone()),
             ("hostname".to_string(),self.hostname.clone()),
-            ("memory".to_string(),format!("{:.2}GB",self.memory_size_as_mb.clone()/1024).to_string()),
+            ("memory".to_string(),format!("{:.2}GB",self.memory_size_as_mb.clone() as f32 /1000.0).to_string()),
             ("CPU".to_string(),self.cpu_brand.clone()),
             ("GPU".to_string(),self.gpu.clone()),
             ("GPU brand".to_string(),self.gpu_brand.clone()),
-            ("GPU memory".to_string(),format!("{:.2}GB",self.gpu_memory_as_mb.clone()/1024).to_string()),
+            ("GPU memory".to_string(),format!("{:.2}GB",self.gpu_memory_as_mb.clone() as f32/1000.0).to_string()),
             ("GPU temperature".to_string(),format!("{}C",self.gpu_temperatuer_celsius.clone()))
         ];
         data

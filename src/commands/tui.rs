@@ -117,7 +117,7 @@ impl TuiApp {
 
         let table = Table::new(
             rows,
-            [Constraint::Percentage(28), Constraint::Percentage(72)],
+            [Constraint::Percentage(15), Constraint::Percentage(72)],
         )
         .block(
             Block::default()
@@ -125,8 +125,8 @@ impl TuiApp {
                 .title(" Hardware Info "),
         )
         .header(header)
-        .column_spacing(2);
-
+        .column_spacing(4);
+        
         f.render_widget(table, chunks[1]);
 
         // let footer = Paragraph::new("[exit<Q>]")

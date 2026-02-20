@@ -5,16 +5,16 @@ mod commands{
     pub mod command;
     pub mod scan_sys;
     pub mod tui;
+    pub mod config;
 }
-use std::{path::{ PathBuf}};
+use std::{path::PathBuf, str::FromStr};
 use colored::{self, Colorize};
 use commands::command::*;
 use tokio;
-use clap::{Parser,Subcommand,CommandFactory};
+use clap::{Parser,Subcommand,CommandFactory,Args};
 use clap_complete::{ Shell, generate};
-use anyhow::{Ok, Result, anyhow};
-
-use crate::commands::{dl::{dl_read_file, download, download_with_filename}, tui::TuiApp};
+use anyhow::{ Result, anyhow};
+use crate::commands::{config::conf::{self, Birthday, Email, Month, save_and_report}, dl::{dl_read_file, download, download_with_filename}, tui::TuiApp};
 
 
 #[derive(Parser)]
@@ -30,7 +30,7 @@ struct  Cli{
 
 
 #[derive(Subcommand)]
-enum Commands {
+pub enum Commands {
     #[command(name="status",
     about="show system status",
     long_about="show data hardware your system\n
@@ -52,7 +52,7 @@ enum Commands {
        #[command(subcommand)]
        action:WifiAction,
     },
-
+    Config(ConfArg),
     #[command(name="monitoring",about="switch to monitoring mod")]
     Monitoring,
 
@@ -80,6 +80,16 @@ enum Commands {
     Complation{
         shell:Shell,
     },
+}
+
+#[derive(Args)]
+pub struct ConfArg {
+
+    #[arg(short='G',long="global")]
+    pub global:bool,
+
+    pub key:String,
+    pub value:String,
 }
 
 #[derive(Subcommand)]
@@ -141,6 +151,46 @@ async fn main()-> Result<()>{
             let mut cmd = Cli::command();
             let name = cmd.get_name().to_string();
             generate(shell, &mut cmd, name, &mut std::io::stdout());
+        },
+        Commands::Config(args)=>{
+            let mut current_user = conf::load_config(args.global).unwrap_or_else(|_| conf::User::empty());
+            if args.key == "user.email"{
+                match Email::new(args.value.clone()) {
+                    Ok(email)=>{
+                        current_user.email = Some(email);
+                        save_and_report(&current_user, args.global);
+                    },
+                    Err(e)=>eprintln!("[{}]:{}","ERROR".red(),e),
+                }
+            }else if args.key == "user.name" {
+                current_user.name = Some(args.value.clone());
+                save_and_report(&current_user, args.global);
+            }else if args.key == "user.birthday" || args.key == "user.birth" {
+                let parts:Vec<&str>=args.value.split('-').collect();
+                if parts.len() != 3{
+                    eprintln!("Please use format:YYY-Month-DD (e.g., 2000-January-15");
+                }else {
+                    let year = parts[0].parse::<u16>().unwrap_or(0);
+                    let month = Month::from_str(parts[1]);
+                    let day = parts[2].parse::<u8>().unwrap_or(0);
+                    match month{
+                        Ok(m)=>{
+                            match Birthday::new(year,m,day) {
+                                Ok(bday)=>{
+                                    current_user.birthday = Some(bday);
+                                    save_and_report(&current_user, args.global);
+                                }
+                                Err(e)=>eprintln!("[{}]:{}","ERROR".red(),e),
+                            }
+                        }
+                        Err(e)=>eprintln!("[{}]:{}","ERROR".red(),e),
+                    }
+                }
+            
+            }else {
+                println!("Key '{}' is not supported",args.key.yellow());
+            }
+
         }
     }
     Ok(())
