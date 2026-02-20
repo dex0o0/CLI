@@ -1,10 +1,8 @@
-use std::{
-    io,
-    time::{Duration, Instant},
-};
+use std::{io, time::Duration};
 
+use anyhow::Result;
 use crossterm::{
-    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode},
+    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode, KeyEventKind},
     execute,
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
@@ -20,49 +18,68 @@ use super::scan_sys::Sysinfo;
 
 pub struct TuiApp;
 
-impl TuiApp {
-    pub fn show_status() {
-        enable_raw_mode().expect("Error from enable raw mode");
+struct TerminalGuard {
+    terminal: Terminal<CrosstermBackend<io::Stdout>>,
+}
+
+impl TerminalGuard {
+    fn new() -> Result<Self> {
+        enable_raw_mode()?;
 
         let mut stdout = io::stdout();
-        execute!(stdout, EnterAlternateScreen, EnableMouseCapture).expect("Error");
+        execute!(stdout, EnterAlternateScreen, EnableMouseCapture)?;
         let backend = CrosstermBackend::new(stdout);
-        let mut terminal = Terminal::new(backend).expect("Error");
+        let terminal = Terminal::new(backend)?;
 
+        Ok(Self { terminal })
+    }
+}
+
+impl Drop for TerminalGuard {
+    fn drop(&mut self) {
+        let _ = disable_raw_mode();
+        let _ = execute!(
+            self.terminal.backend_mut(),
+            LeaveAlternateScreen,
+            DisableMouseCapture,
+        );
+        let _ = self.terminal.show_cursor();
+    }
+}
+
+impl TuiApp {
+    pub fn show_status() -> Result<()> {
+        let mut terminal_guard = TerminalGuard::new()?;
         let tick_rate = Duration::from_secs(2);
-        let mut last_tick = Instant::now();
+        let mut data = Self::load_data();
 
         loop {
-            let data = Self::load_data();
-            terminal.draw(|f| Self::ui(&data, f)).expect("Error");
+            terminal_guard.terminal.draw(|f| Self::ui(&data, f))?;
 
-            let timeout = tick_rate.saturating_sub(last_tick.elapsed());
-            if event::poll(timeout).expect("event poll failed") {
-                if let Event::Key(key) = event::read().expect("event read failed") {
-                    if matches!(key.code, KeyCode::Char('q') | KeyCode::Esc) {
+            if event::poll(tick_rate)? {
+                if let Event::Key(key) = event::read()? {
+                    if key.kind == KeyEventKind::Press
+                        && matches!(key.code, KeyCode::Char('q') | KeyCode::Esc)
+                    {
                         break;
                     }
                 }
-            }
-
-            if last_tick.elapsed() >= tick_rate {
-                last_tick = Instant::now();
+            } else {
+                data = Self::load_data();
             }
         }
 
-        disable_raw_mode().expect("Error from disable raw mode");
-        execute!(
-            terminal.backend_mut(),
-            LeaveAlternateScreen,
-            DisableMouseCapture,
-        )
-        .expect("Error");
-        terminal.show_cursor().expect("show cursor failed");
+        Ok(())
     }
 
     fn load_data() -> Vec<(String, String)> {
         let mut data = Sysinfo::new();
-        data.auto_fill().expect("Error");
+        if data.auto_fill().is_err() {
+            return vec![(
+                "error".to_string(),
+                "failed to load system information".to_string(),
+            )];
+        }
         data.data_vec()
     }
 
@@ -115,7 +132,7 @@ impl TuiApp {
 
         f.render_widget(table, chunks[1]);
 
-        let footer = Paragraph::new("Auto refresh: 2s  |  Press q or Esc to exit")
+        let footer = Paragraph::new("Auto refresh: 2s | Press q or Esc to exit")
             .style(Style::default().fg(Color::Green))
             .alignment(Alignment::Center)
             .block(Block::default().borders(Borders::ALL));
