@@ -1,64 +1,124 @@
+use std::{
+    io,
+    time::{Duration, Instant},
+};
+
+use crossterm::{
+    event::{self, DisableMouseCapture, EnableMouseCapture, Event, KeyCode},
+    execute,
+    terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
+};
 use ratatui::{
     backend::CrosstermBackend,
-    layout::{Alignment,Constraint,Layout},
-    widgets::{Block,Borders,Row,Table,},
-    Frame,Terminal
+    layout::{Alignment, Constraint, Layout},
+    style::{Color, Modifier, Style},
+    widgets::{Block, Borders, Cell, Paragraph, Row, Table},
+    Frame, Terminal,
 };
-use crossterm::{
-    ExecutableCommand, event::{self,DisableMouseCapture,EnableMouseCapture,Event,KeyCode}, execute, terminal::{EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode}
 
-};
-use tabled::grid::config::Border;
-use std::{io,thread,time::Duration};
 use super::scan_sys::Sysinfo;
 
 pub struct TuiApp;
 
-impl TuiApp{
-    pub fn show_status(){
-        enable_raw_mode().expect("Error from enable raw mod");
-        let mut stdout= io::stdout();
-        execute!(stdout,EnterAlternateScreen,EnableMouseCapture).expect("Error");
+impl TuiApp {
+    pub fn show_status() {
+        enable_raw_mode().expect("Error from enable raw mode");
+
+        let mut stdout = io::stdout();
+        execute!(stdout, EnterAlternateScreen, EnableMouseCapture).expect("Error");
         let backend = CrosstermBackend::new(stdout);
         let mut terminal = Terminal::new(backend).expect("Error");
-        let mut data = Sysinfo::new();
-        data.auto_fill().expect("Error");
-        let vec = data.data_vec();
-            
-            terminal.draw(|f| Self::ui(vec, f)).expect("Error");
-        std::thread::sleep(std::time::Duration::from_secs(5));
-        disable_raw_mode().expect("Error from disable raw mod");
+
+        let tick_rate = Duration::from_secs(2);
+        let mut last_tick = Instant::now();
+
+        loop {
+            let data = Self::load_data();
+            terminal.draw(|f| Self::ui(&data, f)).expect("Error");
+
+            let timeout = tick_rate.saturating_sub(last_tick.elapsed());
+            if event::poll(timeout).expect("event poll failed") {
+                if let Event::Key(key) = event::read().expect("event read failed") {
+                    if matches!(key.code, KeyCode::Char('q') | KeyCode::Esc) {
+                        break;
+                    }
+                }
+            }
+
+            if last_tick.elapsed() >= tick_rate {
+                last_tick = Instant::now();
+            }
+        }
+
+        disable_raw_mode().expect("Error from disable raw mode");
         execute!(
             terminal.backend_mut(),
             LeaveAlternateScreen,
             DisableMouseCapture,
-        ).expect("Error");
-        terminal.show_cursor().unwrap();
-
+        )
+        .expect("Error");
+        terminal.show_cursor().expect("show cursor failed");
     }
-    fn ui(data:Vec<(String,String)>,f:&mut Frame){
-        let chunks = Layout::vertical([Constraint::Length(3),Constraint::Min(1)]).split(
-            f.size()
-        );
+
+    fn load_data() -> Vec<(String, String)> {
+        let mut data = Sysinfo::new();
+        data.auto_fill().expect("Error");
+        data.data_vec()
+    }
+
+    fn ui(data: &[(String, String)], f: &mut Frame) {
+        let chunks = Layout::vertical([
+            Constraint::Length(3),
+            Constraint::Min(1),
+            Constraint::Length(2),
+        ])
+        .split(f.area());
+
         let title = Block::default()
-        .borders(Borders::ALL)
-        .title("status")
-        .title_alignment(Alignment::Left);
+            .borders(Borders::ALL)
+            .title(" System Status ")
+            .title_alignment(Alignment::Left)
+            .border_style(Style::default().fg(Color::Cyan));
         f.render_widget(title, chunks[0]);
 
-        let widths = [Constraint::Percentage(30),Constraint::Percentage(70)];
-        let row:Vec<Row>=data.iter()
-        .map(|(k,v)| Row::new(vec![k.to_string(),v.to_string()]))
-        .collect();
-        
-        let table = Table::new(row, widths)
-        .block(Block::default().borders(Borders::ALL))
-        .header(Row::new(vec!["Key","Value"]))
-        .style(ratatui::style::Style::default().add_modifier(ratatui::style::Modifier::BOLD))
-        .column_spacing(1)
-        .widths(&[Constraint::Percentage(30),Constraint::Percentage(70)]);
-        
+        let header = Row::new(vec!["Key", "Value"]).style(
+            Style::default()
+                .fg(Color::Yellow)
+                .add_modifier(Modifier::BOLD),
+        );
+
+        let rows: Vec<Row> = data
+            .iter()
+            .enumerate()
+            .map(|(i, (k, v))| {
+                let row_style = if i % 2 == 0 {
+                    Style::default().fg(Color::White)
+                } else {
+                    Style::default().fg(Color::Gray)
+                };
+
+                Row::new(vec![Cell::from(k.as_str()), Cell::from(v.as_str())]).style(row_style)
+            })
+            .collect();
+
+        let table = Table::new(
+            rows,
+            [Constraint::Percentage(28), Constraint::Percentage(72)],
+        )
+        .block(
+            Block::default()
+                .borders(Borders::ALL)
+                .title(" Hardware Info "),
+        )
+        .header(header)
+        .column_spacing(2);
+
         f.render_widget(table, chunks[1]);
 
+        let footer = Paragraph::new("Auto refresh: 2s  |  Press q or Esc to exit")
+            .style(Style::default().fg(Color::Green))
+            .alignment(Alignment::Center)
+            .block(Block::default().borders(Borders::ALL));
+        f.render_widget(footer, chunks[2]);
     }
 }

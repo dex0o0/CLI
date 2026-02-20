@@ -99,7 +99,7 @@ enum WifiAction{
 async fn main()-> Result<()>{
     let cli = Cli::parse();
     match cli.commad {
-        Commands::Status => {scan_status().expect("Error from scan your system");TuiApp::show_status();},
+        Commands::Status => {TuiApp::show_status();},
         Commands::Wifi { action } =>{
            match action {
                WifiAction::List => {list_network();},
