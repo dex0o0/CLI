@@ -1,55 +1,69 @@
-# **CLI**
-## *dex CLI*
-### اولین پروژه CLI من
+# CLI (dex)
 
-![bash logo](https://img.shields.io/badge/Bash-4EAA25?style=for-the-badge&logo=gnubash&logoColor=white)
-![rust logo](https://img.shields.io/badge/rust-1.70+-blue?logo=rust)
-![linux logo](https://img.shields.io/badge/Linux-supported-green?logo=linux)
+`dex` یک ابزار خط فرمان (CLI) است که با Rust نوشته شده و برای کارهای روزمره سیستم طراحی شده است.
 
+## Features
 
+- نمایش وضعیت سیستم در قالب TUI با به‌روزرسانی دوره‌ای
+- مدیریت Wi-Fi با استفاده از `nmcli`
+- باز کردن سرویس‌های وب (GitHub, Gmail, YouTube Music)
+- ارسال نوتیفیکیشن با اسکریپت محلی
+- دانلود فایل از URL یا لیست URL داخل فایل
 
-<br>
+## Requirements
 
-**how to install**
-for install on linux type in terminal 
-> برای نصب این دستورات رو در ترمینال وارد کنید
+- Linux
+- Rust toolchain
+- `nmcli` (برای دستورات Wi-Fi)
+
+## Install
 
 ```bash
-cd "address clone git"/dex
+cd /path/to/cloned/repo
 chmod +x install.sh
-./install.sh #run file install
+./install.sh
 ```
-**how to use**
-> با زدن این کد میتوانید دستور عمل های کد رو بخونید
+
+## Usage
+
 ```bash
 dex --help
 dex --version
 ```
-> command wifi
+
+### Wi-Fi commands
+
 ```bash
 dex wifi list
-dex wifi connect <name_wifi>
+dex wifi connect <NETWORK_NAME>
 dex wifi connection
-dex wifi disconnect <name_wifi>
+dex wifi disconnect <NETWORK_DEVICE>
 ```
-> command status
+
+### System status
+
 ```bash
-└─$ dex status                  
-name_os: dex GNU/Linux
-kernel: 6.16.8+dex-amd64
-hostname: dex
-memory_size_as_mb: 15869
-cpu_brand: Intel(R) Core(TM) i7-6700HQ CPU @ 2.60GHz
-gpu: NVIDIA GeForce GTX 960M
-gpu_brand: GeForce
-gpu_memory_as_mb: 4096
-gpu_temperatuer_celsius: 43
+dex status
 ```
 
-<br>
+در حالت `status` یک رابط TUI باز می‌شود که اطلاعات سیستم را هر ۲ ثانیه به‌روزرسانی می‌کند.
+برای خروج از این صفحه از `q` یا `Esc` استفاده کنید.
 
+### Download
 
-<img src="https://avatars.githubusercontent.com/u/192888708?v=4" width="25px" style="border-radius:99px">[my_git_hub](https://github.com/dex0o0 "github")
+```bash
+dex dl --url <URL>
+dex dl --url <URL> --filename <FILE_NAME>
+dex dl --file <PATH_TO_TEXT_FILE>
+```
 
+## Project structure
 
-**LICENSE MIT**
+- `src/main.rs`: ورودی برنامه و تعریف commandها
+- `src/commands/tui.rs`: رابط TUI برای وضعیت سیستم
+- `src/commands/scan_sys.rs`: جمع‌آوری اطلاعات سخت‌افزاری
+- `src/commands/command.rs`: سایر commandهای سیستم
+
+## License
+
+MIT
