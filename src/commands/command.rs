@@ -126,3 +126,7 @@ pub async fn github()-> Result<()>{
     .output();
     Ok(())
 }
+pub async fn chrome()->Result<()>{
+    let _ = Command::new("google-chrome-stable").output();
+    Ok(())
+}

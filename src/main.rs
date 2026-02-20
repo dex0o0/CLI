@@ -113,7 +113,7 @@ async fn main()-> Result<()>{
         Commands::YM => {open_youtube_music().await.expect("failed open youtube music")},
         Commands::Gmail => {open_gmail().await.expect("Error to open gmail")},
         Commands::Codemod => {
-
+            let _= chrome().await;
             let _= github().await;
             let _=open_gmail().await;
             let _=open_youtube_music().await;
