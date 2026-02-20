@@ -99,7 +99,7 @@ pub fn client_build()->reqwest::Client{
         Client::builder()
             .user_agent(agent)
             .build().unwrap_or_else(|e|{
-                eprintln!("[{}] to create client","ERROR".red());
+                eprintln!("[{}] to create client:{}","ERROR".red(),e);
                 Client::new()
             })
     

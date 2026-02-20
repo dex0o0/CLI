@@ -7,11 +7,7 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use ratatui::{
-    backend::CrosstermBackend,
-    layout::{Alignment, Constraint, Layout},
-    style::{Color, Modifier, Style},
-    widgets::{Block, Borders, Cell, Paragraph, Row, Table},
-    Frame, Terminal,
+    Frame, Terminal, backend::CrosstermBackend, layout::{Alignment, Constraint, Layout}, style::{Color, Modifier, Style}, symbols::line::BOTTOM_LEFT, text::Line, widgets::{Block, Borders, Cell, Paragraph, Row, Table, TitlePosition}
 };
 
 use super::scan_sys::Sysinfo;
@@ -85,18 +81,19 @@ impl TuiApp {
 
     fn ui(data: &[(String, String)], f: &mut Frame) {
         let chunks = Layout::vertical([
-            Constraint::Length(3),
+            Constraint::Length(4),
             Constraint::Min(1),
-            Constraint::Length(2),
+            Constraint::Length(4),
         ])
         .split(f.area());
 
         let title = Block::default()
             .borders(Borders::ALL)
             .title(" System Status ")
-            .title_alignment(Alignment::Left)
+            .title_alignment(Alignment::Center)
             .border_style(Style::default().fg(Color::Cyan));
         f.render_widget(title, chunks[0]);
+        
 
         let header = Row::new(vec!["Key", "Value"]).style(
             Style::default()
@@ -132,10 +129,18 @@ impl TuiApp {
 
         f.render_widget(table, chunks[1]);
 
-        let footer = Paragraph::new("Auto refresh: 2s | Press q or Esc to exit")
-            .style(Style::default().fg(Color::Green))
-            .alignment(Alignment::Center)
-            .block(Block::default().borders(Borders::ALL));
+        // let footer = Paragraph::new("[exit<Q>]")
+        //     .style(Style::default().fg(Color::Green))
+        //     .alignment(Alignment::Left)
+        //     .block(Block::default().borders(Borders::ALL));
+        let footer = Block::default()
+        .borders(Borders::ALL)
+        .title("[<Q>exit]")
+        .title(Line::from("[Refresh at 2s]").left_aligned())
+        .border_style(Style::default().fg(Color::Blue))
+        .title_alignment(Alignment::Center)
+        .title_style(Style::default().fg(Color::White));
+        
         f.render_widget(footer, chunks[2]);
-    }
+}
 }
