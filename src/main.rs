@@ -6,15 +6,16 @@ mod commands{
     pub mod scan_sys;
     pub mod tui;
     pub mod config;
+    pub mod module; 
+    pub mod mod_screen;
 }
-use std::{path::PathBuf, str::FromStr};
+use std::{env::current_dir, path::PathBuf, str::FromStr};
 use colored::{self, Colorize};
 use commands::command::*;
-use tokio;
 use clap::{Parser,Subcommand,CommandFactory,Args};
 use clap_complete::{ Shell, generate};
 use anyhow::{ Result, anyhow};
-use crate::commands::{config::conf::{self, Birthday, Email, Month, save_and_report}, dl::{dl_read_file, download, download_with_filename}, tui::TuiApp};
+use crate::commands::{config::conf::{self, Birthday, Email, Month, save_and_report}, dl::{dl_read_file, download, download_with_filename}, mod_screen::gamemod, module::deepsearch::{search}, tui::TuiApp};
 
 
 #[derive(Parser)]
@@ -59,7 +60,7 @@ pub enum Commands {
 
     #[command(name="codemod",about="switch to coding mod",long_about="open git,gmail and youtube music")]
     Codemod,
-
+    Gamemod,
     #[command(name="notif",about="set notif for any time")]
     Notif{
         title:String,
@@ -78,6 +79,15 @@ pub enum Commands {
         file:Option<PathBuf>,
     },
     TODO,
+    #[command(name="ls",about="deep sreach in system")]
+    Search{
+        #[arg(short='p',long="path")]
+        path:Option<PathBuf>,
+        #[arg(short='t',long="target")]
+        target:Option<String>,
+        #[arg(short='d',long="depth")]
+        depth:Option<usize>,
+    },
     Complation{
         shell:Shell,
     },
@@ -124,7 +134,7 @@ async fn main()-> Result<()>{
         Commands::YM => {open_youtube_music().await.expect("failed open youtube music")},
         Commands::Gmail => {open_gmail().await.expect("Error to open gmail")},
         Commands::Codemod => {
-            let _= chrome().await;
+            // let _= chrome().await;
             let _= github().await;
             let _=open_gmail().await;
             let _=open_youtube_music().await;
@@ -133,19 +143,19 @@ async fn main()-> Result<()>{
             notif_send(title,body,time);
         },
         Commands::Dl { url,name,file } => {
-           let _ = if let Some(file_path) = file {
+            if let Some(file_path) = file {
                 if !file_path.exists(){
                     return Err(anyhow!("[{}]file dose not exists","ERROR".red()));
                 }
                 dl_read_file(file_path).await.expect("Error");
-           }else if let (Some(url),Some(name)) = (&url,name) {
+            }else if let (Some(url),Some(name)) = (&url,name) {
                 download_with_filename(&url, &name).await.expect("Error");
-           }else if let Some(u) = &url {
+            }else if let Some(u) = &url {
                 download(&u).await.expect("Error");
-           }else {
+            }else {
                eprintln!("option not found please dex dl --help");
                return Ok(());
-           };
+            };
         },
         Commands::TODO => {},
         Commands::Config(args)=>{
@@ -192,6 +202,19 @@ async fn main()-> Result<()>{
             let mut cmd = Cli::command();
             let name = cmd.get_name().to_string();
             generate(shell, &mut cmd, name, &mut std::io::stdout());
+        },
+        Commands::Gamemod =>{
+            match gamemod::GamemMod::on(){
+                Ok(_)=>println!("game mode oned"),
+                Err(e)=>eprintln!("Error:{}",e),
+            }
+        },
+        Commands::Search { path, target,depth }=>{
+            search(
+                path.unwrap_or_else(|| current_dir().expect("i can't get current dir")),
+                &target.unwrap_or_else(|| "".to_string()),
+                depth.unwrap_or(0)
+            );
         },
     }
     Ok(())
