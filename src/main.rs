@@ -1,6 +1,5 @@
 mod commands{
     pub mod dl;
-    pub mod extractLinks;
     pub mod monitoring;
     pub mod command;
     pub mod scan_sys;
@@ -81,11 +80,11 @@ pub enum Commands {
     TODO,
     #[command(name="ls",about="deep sreach in system")]
     Search{
-        #[arg(short='p',long="path")]
+        #[arg(short='p',long="path",help="path directory for search")]
         path:Option<PathBuf>,
-        #[arg(short='t',long="target")]
+        #[arg(short='t',long="target",help="target for deepsearch")]
         target:Option<String>,
-        #[arg(short='d',long="depth")]
+        #[arg(short='d',long="depth",help="depth search in path")]
         depth:Option<usize>,
     },
     Complation{
@@ -104,7 +103,7 @@ pub struct ConfArg {
 }
 
 #[derive(Subcommand)]
-enum WifiAction{
+pub enum WifiAction{
     List,
     Connect{
         #[arg(value_name = "NETWORK_NAME")]
@@ -149,9 +148,9 @@ async fn main()-> Result<()>{
                 }
                 dl_read_file(file_path).await.expect("Error");
             }else if let (Some(url),Some(name)) = (&url,name) {
-                download_with_filename(&url, &name).await.expect("Error");
+                download_with_filename(url, &name).await.expect("Error");
             }else if let Some(u) = &url {
-                download(&u).await.expect("Error");
+                download(u).await.expect("Error");
             }else {
                eprintln!("option not found please dex dl --help");
                return Ok(());
