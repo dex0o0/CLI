@@ -80,7 +80,7 @@ impl Sysinfo {
     }
     #[allow(dead_code)]
     pub fn display(&self) {
-    // ایجاد HashMap برای مپ کردن نام فیلد به مقدار
+
     let field_map: HashMap<&str, String> = HashMap::from([
         ("name_os", self.name_os.clone()),
         ("kernel", self.kernel.clone()),
@@ -99,7 +99,7 @@ impl Sysinfo {
         "gpu_temperatuer_celsius"
     ];
 
-    // حالا می‌تونی مپ کنی
+    
     field_names.iter()
         .filter_map(|name| field_map.get(name).map(|value| (name, value)))
         .for_each(|(name, value)| println!("{}: {}", name.blue().bold() , value.green()));
@@ -171,16 +171,16 @@ impl CPUINFO{
 #[allow(dead_code)]
 pub fn physical_mem_stats()-> Option<f64>{
     if let Some(usege) = memory_stats(){
-        Some(( usege.physical_mem as f64  / 1024.0 ).try_into().unwrap())
-        
-    }else{
+        Some((usege.physical_mem as f32 / 1024.0 ).try_into().unwrap())
+    }else {
         None
     }
 }
+
 #[allow(dead_code)]
 pub fn virtual_mem_stats()-> Option<f64>{
     if let Some(usege) = memory_stats(){
-        Some((usege.virtual_mem as f64 / 1024.0 ).try_into().unwrap())
+        Some((usege.virtual_mem as f32 / 1024.0 ).try_into().unwrap())
     }else{
         None
     }

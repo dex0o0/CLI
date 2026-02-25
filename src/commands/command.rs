@@ -1,9 +1,9 @@
 use std::result::Result::Ok;
-use core::fmt;
+//use core::fmt;
 use std::process::Command;
 use anyhow::Result;
 use std::path::PathBuf;
-use crate::commands::scan_sys;
+//use crate::commands::scan_sys;
 
 // pub fn download(chat:String){
 //     let new = Link::new();
@@ -83,6 +83,7 @@ fn current_dir()-> PathBuf{
     .to_path_buf();
     current_dir
 }
+#[warn(dead_code)]
 fn ch_adress(path:&'static str)->String{
     let c_d=current_dir();
     let mut  file_path = String::new();
@@ -91,9 +92,7 @@ fn ch_adress(path:&'static str)->String{
 }
 pub async fn open_git(){
     let current_dir = current_dir();
-    let mut script = String::new();
-    script = format!("{}/src/scripts/git.sh",current_dir.display());
-    // println!("{}",&script);
+    let script = format!("{}/src/scripts/git.sh",current_dir.display());
     let _ = Command::new("sh")
     .arg(script)
     .output().expect("Error from run script open git");
@@ -112,7 +111,7 @@ pub async fn open_youtube_music()-> Result<()>{
     .output();
     Ok(())
 }
-pub fn notif_send(title:String,body:String,time:String){
+pub fn notif_send(_title:String,_body:String,_time:String){
     todo!()
 }
 
@@ -122,7 +121,34 @@ pub async fn github()-> Result<()>{
     .output();
     Ok(())
 }
+
+#[warn(dead_code)]
 pub async fn chrome()->Result<()>{
     let _ = Command::new("google-chrome-stable").output();
     Ok(())
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

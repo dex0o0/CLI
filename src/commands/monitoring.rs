@@ -23,6 +23,7 @@ struct StackLog{
     level:String,
     keyword: &'static str,
 }
+
 impl StackLog {
     pub fn new(&mut self)-> Self{
         StackLog{

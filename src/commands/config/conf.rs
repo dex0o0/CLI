@@ -86,7 +86,6 @@ impl FromStr for Month {
         }
     }
 }
-
 impl User {
     pub fn empty()->Self{
         Self { name: None, 
@@ -126,9 +125,16 @@ pub fn load_config(global:bool)->Result<User,Box<dyn std::error::Error>>{
 
 }
 pub fn save_and_report(user: &User, global: bool) {
+
+
     if let Err(e) = save_conf(user, global) {
         eprintln!("[{}]: Failed to save config: {}", "ERROR".red(), e);
     } else {
         println!("[{}] Configuration updated successfully", "OK".green());
     }
 }
+
+
+
+
+
