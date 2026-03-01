@@ -1,7 +1,7 @@
 use std::result::Result::Ok;
 use fs2::{self, free_space};
 use tokio::net::TcpStream;
-use super::extractLinks::Link;
+use super::extractlinks::Link;
 use anyhow::{Result, anyhow};
 use colored::Colorize;
 use dirs::download_dir;
@@ -86,16 +86,16 @@ pub async fn dl_read_file(file:PathBuf)->Result<()>{
 //extract filename
 fn extract_filename(url:&str)->Result<String>{
     url.split('/')
-    .last()
+    .next_back()
     .filter(|s| !s.is_empty())
     .map(|s| s.to_string())
     .ok_or_else(|| anyhow!("can't find filename"))
 }
 /////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////
-/// 
+ 
 pub fn client_build()->reqwest::Client{
-        let agent = format!("dex-cli/0.1.0");
+        let agent = "dex-cli/0.1.0".to_string();
         Client::builder()
             .user_agent(agent)
             .build().unwrap_or_else(|e|{
@@ -112,16 +112,16 @@ impl DownloadChecker {
         eprintln!("connection lost");
         return false;
         }
-        if !Self::check_url(&url).await {
+        if !Self::check_url(url).await {
             return false;
         }
-        if !Self::check_file(&path) {
+        if !Self::check_file(path) {
             return false;
         }
-        if !Self::check_url_access(&url).await {
+        if !Self::check_url_access(url).await {
             return false;
         }
-        if !Self::check_space(&url, &path).await {
+        if !Self::check_space(url, path).await {
             return false;
         }
         let client = client_build();
@@ -228,8 +228,8 @@ impl DownloadChecker {
 }
 
 fn bytes_to_human(byte:u64)->f32{
-    let human_size = byte as f32 / 1024.0 /1024.0;
-    human_size
+    let human  =  byte as f32 / 1024.0 /1024.0;
+    human   
 }
 
 //download fn

@@ -1,6 +1,7 @@
 mod commands{
     pub mod dl;
     pub mod monitoring;
+    pub mod extractlinks;
     pub mod command;
     pub mod scan_sys;
     pub mod tui;

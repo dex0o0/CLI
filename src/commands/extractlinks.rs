@@ -20,7 +20,7 @@ pub enum LinkCategory{
 }
 impl Link{
     pub fn new(url:&str) -> Self{
-        let categor = Self::category(&url);
+        let categor = Self::category(url);
         Link{
             string: url.to_string(),
             category:categor,
@@ -45,6 +45,7 @@ impl Link{
     pub fn is_valid(&self)-> bool{
         self.category != LinkCategory::Unknown
     }
+
 
     pub fn extract(&self) -> Option<String>{
         match self.category {

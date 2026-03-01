@@ -95,20 +95,20 @@ pub async fn open_git(){
     let script = format!("{}/src/scripts/git.sh",current_dir.display());
     let _ = Command::new("sh")
     .arg(script)
-    .output().expect("Error from run script open git");
+    .spawn();
 }
 
 pub async fn open_gmail()->Result<()>{
     let _ = Command::new("google-chrome-stable")
-    .args(["--app=https://accounts.google.com/b/0/AddMailService"," --start-fullscreen ","--new-window"])
-    .output();
+    .args(["--app=https://accounts.google.com/b/0/AddMailService","--new-window"])
+    .spawn()?;
     Ok(())
 }
 
 pub async fn open_youtube_music()-> Result<()>{
     let _ = Command::new("google-chrome-stable")
     .args(["--app=https://music.youtube.com/"," --start-fullscreen"," --new-window"])
-    .output();
+    .spawn()?;
     Ok(())
 }
 pub fn notif_send(_title:String,_body:String,_time:String){
@@ -118,7 +118,7 @@ pub fn notif_send(_title:String,_body:String,_time:String){
 pub async fn github()-> Result<()>{
     let _ = Command::new("google-chrome-stable")
     .args( ["--app=https://github.com/"," --start-fullscreen", "--new-window"])
-    .output();
+    .spawn();
     Ok(())
 }
 
