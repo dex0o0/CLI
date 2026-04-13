@@ -1,10 +1,10 @@
 use crossterm::style::Stylize;
 use tokio::fs;
-use sysinfo::{Disks,System};
+use sysinfo::{Disks};
 use std::{
-    fs::{File, read, read_to_string, write},
-    io::{BufReader, Read}, path::Path, 
-    sync::{Arc,Mutex}, thread, time::Duration
+    fs::{File, read_to_string},
+    io::{BufReader, Read}, 
+    sync::{Arc,Mutex}
 };
 use env;
 
