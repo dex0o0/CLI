@@ -10,6 +10,9 @@ description = "a cool cli for linux users"
 name = "dex"
 path = "src/main.rs"
 
+[[bin]]
+name = "test"
+path = "src/test.rs" 
 
 [dependencies]
 anyhow = "1.0"
@@ -24,6 +27,7 @@ futures-util = "0.3"
 indicatif = "0.17"              
 machine-info = "1.0"
 memory-stats = "1.2"
+rand = "0.9.2"
 ratatui = {version="0.30.0",features=["crossterm_0_29"]}
 rayon = "1.11.0"
 regex = "1.12"

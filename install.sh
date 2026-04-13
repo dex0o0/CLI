@@ -1,30 +1,31 @@
-#!/bin/zsh
-set -e 
-echo "Building dex"
-if ! cargo build --release; then 
-  echo "failed to Building"
-  exit 1
+#!/bin/bash
+
+CURRENT_DIR=$(pwd)
+ROOT_BIN="/usr/bin/"
+SHELL_NAME=$(basename $SHELL)
+SHELL_RC="$HOME/.${shell_name}rc"
+BINARY_PATH="$CURRENT_DIR/target/release/dex"
+
+check_cargo(){
+  echo "building project"
+  if cargo build --release &>/dev/null;then
+    echo "build success"
+    return 0
+  else
+    echo "build Failed"
+    return 1
+  fi
+  
+}
+
+error_exit(){
+  echo $1
+  exit 1 
+}
+
+if check_cargo;then
+  echo "create \"dex\" binary" && sudo mv $BINARY_PATH $ROOT_BIN || error_exit "Error to moving $BINARY_PATH to $ROOT_BIN"
+  echo "<----------------completed------------------->"
 else
-  echo "..Building completed.."
+  echo "please check cargo installed"
 fi
-current_dir=$(pwd)
-shell_name=$(basename $SHELL)
-shell_rc="$HOME/.${shell_name}rc"
-binary_path="$current_dir/target/release/dex"
-if [ ! -f "$binary_path" ]; then 
-  echo "Binary not found:$binary_path"
-  exit 1
-fi
-if [ ! "$shell_rc" ];then
-  touch "$shell_rc"
-fi
-echo "check file:$shell_rc"
-if ! grep -q "alias dex='$binary_path'" "$shell_rc";then
-  echo "alias dex='$binary_path'">>"$shell_rc"
-  echo "added"
-else
-  echo "alredy exists config in $shell_rc"
-fi
-chmod +x "$binary_path"
-source "$shell_rc"
-echo "........completed......."

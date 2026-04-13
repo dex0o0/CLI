@@ -7,7 +7,7 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use ratatui::{
-    Frame, Terminal, backend::CrosstermBackend, layout::{Alignment, Constraint, Layout}, style::{Color, Modifier, Style}, symbols::line::BOTTOM_LEFT, text::Line, widgets::{Block, Borders, Cell, Paragraph, Row, Table, TitlePosition}
+    Frame, Terminal, backend::CrosstermBackend, layout::{Alignment, Constraint, Layout}, style::{Color, Modifier, Style}, symbols::line::BOTTOM_LEFT, text::Line, widgets::{Block, Borders, Cell, Padding, Paragraph, Row, Table, TitlePosition}
 };
 
 use super::scan_sys::Sysinfo;

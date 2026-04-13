@@ -1,7 +1,10 @@
+use crossterm::style::Stylize;
 use tokio::fs;
-use super::scan_sys;
+use sysinfo::{Disks,System};
 use std::{
-    fs::{File, read, read_to_string, write}, io::{BufReader, Read}, path::Path, sync::{Arc,Mutex}, thread, time::Duration
+    fs::{File, read, read_to_string, write},
+    io::{BufReader, Read}, path::Path, 
+    sync::{Arc,Mutex}, thread, time::Duration
 };
 use env;
 
@@ -94,9 +97,36 @@ fn read_log_file(path:&str)-> Result<String,String> {
 }
 
 
+pub async fn disk_check(){
+    println!("disk\t\ttotal\tusage\tfree\tmontpoint");
+    let disks = Disks::new_with_refreshed_list();
+    let colors:Vec<&'static str>= vec!["red","blue","green","yellow"];
+    let mut cindex = 0;
+    disks.iter().for_each(|disk| {
+        let total = disk.total_space();
+        let free_space = disk.available_space();
+        let use_space = total - free_space;
+        let montpoint = disk.mount_point().display();
+        let masssage = format!("{}\t{:.2}G\t{:.2}G\t{:.2}G\t{}",
+            disk.name().to_string_lossy(),
+            (total as f32 / 1024.0/1024.0/1024.0),
+            (use_space as f32 /1024.0/1024.0/1024.0),
+            (free_space as f32 /1024.0/1024.0/1024.0),
+            montpoint);
+        print_color(masssage, colors[cindex]);
+        cindex += 1;
+    }); 
+}
 
-
-
+fn print_color(msg:String,color:&'static str){
+    match color {
+        "red" =>println!("{}",msg.red()),
+        "blue"=>println!("{}",msg.blue()),
+        "green"=>println!("{}",msg.green()),
+        "yellow"=>println!("{}",msg.yellow()),
+        _=>println!("{}",msg),
+    }
+}
 
 
 

@@ -15,13 +15,13 @@ use commands::command::*;
 use clap::{Parser,Subcommand,CommandFactory,Args};
 use clap_complete::{ Shell, generate};
 use anyhow::{ Result, anyhow};
-use crate::commands::{config::conf::{self, Birthday, Email, Month, save_and_report}, dl::{dl_read_file, download, download_with_filename}, mod_screen::gamemod, module::deepsearch::{search}, tui::TuiApp};
+use crate::commands::{config::conf::{self, Birthday, Email, Month, save_and_report}, dl::{dl_read_file, download, download_with_filename}, mod_screen::gamemod, module::{deepsearch::search, readstory, smalmodule}, monitoring, tui::TuiApp};
 
 
 #[derive(Parser)]
 #[command(name = "dex")]
 #[command(version = "0.1.421")]
-#[command(about = "CLI for easier\nuse as tools and easier\n\"made by dex0o0\"\tgit hub:\"https://github.com/dex0o0\"")]
+#[command(about = "CLI for easier works\n\n\"made by dex0o0\"\tgit hub:\"https://github.com/dex0o0\"")]
 struct  Cli{
     #[command(subcommand)]
     commad:Commands,
@@ -57,7 +57,7 @@ pub enum Commands {
     Config(ConfArg),
     #[command(name="monitoring",about="switch to monitoring mod")]
     Monitoring,
-
+    Disk,
     #[command(name="codemod",about="switch to coding mod",long_about="open git,gmail and youtube music")]
     Codemod,
     Gamemod,
@@ -91,14 +91,23 @@ pub enum Commands {
     Complation{
         shell:Shell,
     },
+    #[command(name="rds",
+    about="read file and type data on screen.\n
+    [how to use]\n\tyou can run this command for read storyes\n\t\"dex rds <file-path>\"\n
+    [how to write story]\n\tyou can use lot of command for print colorize and waite as some point\n\n\n
+    [commands]\n\t\"\\[r,g,b,y,B]\\<note>\\\"\tthis is structuer for print colorize [red,green,blue,yellow,and {B} for bold text]
+    \n\t\"_\"\t\t\tthis charecter can help you for set delay in printing
+    \n\t \t\t\tyou can place this charecter wherever in your story")]
+    ReadStory{
+        #[arg(help="file path")]
+        path_file:String,
+    },
 }
 
 #[derive(Args)]
 pub struct ConfArg {
-
     #[arg(short='G',long="global")]
     pub global:bool,
-
     pub key:String,
     pub value:String,
 }
@@ -216,6 +225,13 @@ async fn main()-> Result<()>{
                 depth.unwrap_or(0)
             );
         },
+        Commands::ReadStory { path_file } => {
+            readstory::read_file_story(path_file);
+        },
+        Commands::Disk=>{
+            monitoring::disk_check().await;
+        }
+
     }
     Ok(())
 }
