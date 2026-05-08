@@ -1,3 +1,2 @@
-// pub fn enable_code_mod()-> Result<()>{
-    
-// }
+// pub fn enable_code_mod() -> Result<(), anyhow::Error> {Ok(())   }
+
