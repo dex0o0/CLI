@@ -8,6 +8,7 @@ use std::{
 use sysinfo::Disks;
 use tokio::fs;
 
+#[allow(unused)]
 struct Logs {
     log: Arc<Mutex<Vec<StackLog>>>,
     monitorng: bool,
@@ -20,6 +21,8 @@ impl Logs {
     //     }
     // }
 }
+
+#[allow(unused)]
 struct StackLog {
     path: &'static str,
     content: String,
@@ -27,6 +30,7 @@ struct StackLog {
     keyword: &'static str,
 }
 
+#[allow(unused)]
 impl StackLog {
     pub fn new(&mut self) -> Self {
         StackLog {
@@ -36,15 +40,17 @@ impl StackLog {
             keyword: "Error",
         }
     }
-    pub fn check(&mut self, word: String) -> Result<(), String> {
-        match check_word_in_file(self.path, word) {
-            (true, line) => {
-                todo!("fix {line}")
-            }
-            _ => todo!(),
-        }
-    }
+    // pub fn check(&mut self, word: String) -> Result<(), String> {
+    //     match check_word_in_file(self.path, word) Result<(),anyhow::Error>{
+    //         (true, line) => {
+    //             todo!("fix {line}");
+    //
+    //         }
+    //         _ => todo!(),
+    //     }
+    // }
 }
+#[allow(unused)]
 pub fn add_path_log(name: &'static str, content: String) {
     let path = env::current_exe()
         .expect("Error to get path file")
@@ -58,6 +64,7 @@ pub fn add_path_log(name: &'static str, content: String) {
     fs::write(&path_log, content);
 }
 
+#[allow(unused)]
 fn cunt_line_log() -> u32 {
     let binding = env::current_exe().expect("Error can't get path exe");
     let binding = binding.parent().expect("Error can't get parent path exe");
@@ -78,6 +85,7 @@ fn cunt_line_log() -> u32 {
     }
 }
 
+#[allow(unused)]
 fn check_word_in_file(path: &str, word: String) -> Result<(), anyhow::Error> {
     let content_file = read_log_file(path).expect("Error read");
     let mut num_line: u32 = 0;
@@ -137,4 +145,5 @@ fn print_color(msg: String, color: &'static str) {
 
 /////////main//////////
 ///////////////////////
+#[allow(unused)]
 pub fn monitoring_mode() {}

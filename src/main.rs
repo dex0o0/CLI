@@ -128,15 +128,7 @@ pub enum Commands {
     #[command(about = "generate auto suggestions")]
     Complation { shell: Shell },
 
-    #[command(
-        name = "rds",
-        about = "read file and type data on screen.\n
-    [how to use]\n\tyou can run this command for read storyes\n\t\"dex rds <file-path>\"\n
-    [how to write story]\n\tyou can use lot of command for print colorize and waite as some point\n\n\n
-    [commands]\n\t\"\\[r,g,b,y,B]\\<note>\\\"\tthis is structuer for print colorize [red,green,blue,yellow,and {B} for bold text]
-    \n\t\"_\"\t\t\tthis charecter can help you for set delay in printing
-    \n\t \t\t\tyou can place this charecter wherever in your story"
-    )]
+    #[command(name = "rds", about = "read story/file v2 ")]
     ReadStory {
         #[arg(help = "file path")]
         path_file: PathBuf,
@@ -279,7 +271,7 @@ async fn main() -> Result<()> {
             );
         }
         Commands::ReadStory { path_file } => {
-            readstory::read_file_story(path_file);
+            readstory::read_file_story_v2(path_file);
         }
         Commands::Disk => {
             monitoring::disk_check().await;
