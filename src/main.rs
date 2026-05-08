@@ -61,18 +61,23 @@ pub enum Commands {
     },
     #[command(name = "config", about = "config user and save data")]
     Config(ConfArg),
+
     #[command(name = "monitoring", about = "switch to monitoring mod")]
     Monitoring,
+
     #[command(about = "show list disk")]
     Disk,
+
     #[command(
         name = "codemod",
         about = "switch to coding mod",
         long_about = "open git,gmail and youtube music"
     )]
     Codemod,
+
     #[command(about = "on/off game mod")]
     Gamemod,
+
     #[command(name = "notif", about = "set notif for any time")]
     Notif {
         title: String,
@@ -89,6 +94,7 @@ pub enum Commands {
             help = "| link download"
         )]
         url: Option<String>,
+
         #[arg(
             short = 'o',
             long = "filename",
@@ -99,6 +105,7 @@ pub enum Commands {
         #[arg(short = 'f', long = "file", help = "| read link in file")]
         file: Option<PathBuf>,
     },
+
     #[command(name = "ls", about = "deep sreach in system")]
     Search {
         #[arg(short = 'p', long = "path", help = "path directory for search")]
@@ -140,6 +147,7 @@ pub enum Commands {
 pub struct ConfArg {
     #[arg(short = 'G', long = "global")]
     pub global: bool,
+
     pub key: String,
     pub value: String,
 }
@@ -151,6 +159,7 @@ pub enum WifiAction {
         #[arg(value_name = "NETWORK_NAME")]
         name: String,
     },
+
     Connection,
     Disconnect {
         #[arg(value_name = "NETWORK_DEVICE", default_value = "wlan0")]
