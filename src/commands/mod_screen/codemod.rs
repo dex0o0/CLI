@@ -1,2 +1,4 @@
-// pub fn enable_code_mod() -> Result<(), anyhow::Error> {Ok(())   }
-
+#[allow(dead_code)]
+pub fn run() {
+    todo!();
+}
