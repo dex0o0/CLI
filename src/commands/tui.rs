@@ -7,7 +7,12 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
 };
 use ratatui::{
-    Frame, Terminal, backend::CrosstermBackend, layout::{Alignment, Constraint, Layout}, style::{Color, Modifier, Style}, symbols::line::BOTTOM_LEFT, text::Line, widgets::{Block, Borders, Cell, Padding, Paragraph, Row, Table, TitlePosition}
+    backend::CrosstermBackend,
+    layout::{Alignment, Constraint, Layout},
+    style::{Color, Modifier, Style},
+    text::Line,
+    widgets::{Block, Borders, Cell, Row, Table},
+    Frame, Terminal,
 };
 
 use super::scan_sys::Sysinfo;
@@ -93,7 +98,6 @@ impl TuiApp {
             .title_alignment(Alignment::Center)
             .border_style(Style::default().fg(Color::Cyan));
         f.render_widget(title, chunks[0]);
-        
 
         let header = Row::new(vec!["Key", "Value"]).style(
             Style::default()
@@ -126,7 +130,7 @@ impl TuiApp {
         )
         .header(header)
         .column_spacing(4);
-        
+
         f.render_widget(table, chunks[1]);
 
         // let footer = Paragraph::new("[exit<Q>]")
@@ -134,13 +138,13 @@ impl TuiApp {
         //     .alignment(Alignment::Left)
         //     .block(Block::default().borders(Borders::ALL));
         let footer = Block::default()
-        .borders(Borders::ALL)
-        .title("[<Q>exit]")
-        .title(Line::from("[Refresh at 2s]").left_aligned())
-        .border_style(Style::default().fg(Color::Blue))
-        .title_alignment(Alignment::Center)
-        .title_style(Style::default().fg(Color::White));
-        
+            .borders(Borders::ALL)
+            .title("[<Q>exit]")
+            .title(Line::from("[Refresh at 2s]").left_aligned())
+            .border_style(Style::default().fg(Color::Blue))
+            .title_alignment(Alignment::Center)
+            .title_style(Style::default().fg(Color::White));
+
         f.render_widget(footer, chunks[2]);
-}
+    }
 }

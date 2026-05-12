@@ -1,10 +1,7 @@
+use super::smalmodule::sleep;
 use clearscreen;
 use crossterm::style::Stylize;
-use std::{fs, path::PathBuf, thread, time::Duration};
-
-fn sleep(duration: u64) {
-    thread::sleep(Duration::from_millis(duration));
-}
+use std::{fs, path::PathBuf};
 
 fn get_command(not: String) -> String {
     not.replace("\"", "").replace("_", " ")

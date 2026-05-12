@@ -54,15 +54,13 @@ fn normal_search(path: PathBuf) {
                 .file_name()
                 .and_then(|n| n.to_str())
                 .unwrap_or("Unknown");
-            if name == "%" {
-                return;
-            }
             if path.is_dir() {
                 print!("{}\t", name.blue());
             } else {
                 print!("{}\t", name.green());
             }
         });
+        println!();
     }
 }
 fn deep_search(path: PathBuf, target: &str, blk: &SearchOPT) {

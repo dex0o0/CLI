@@ -13,7 +13,7 @@ use crate::commands::{
     config::conf::{self, save_and_report, Birthday, Email, Month},
     dl::{dl_read_file, download, download_with_filename},
     mod_screen::gamemod,
-    module::{deepsearch::search, readstory, smalmodule},
+    module::{deepsearch::search, readstory},
     monitoring,
     tui::TuiApp,
 };
