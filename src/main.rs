@@ -182,7 +182,7 @@ async fn main() -> Result<()> {
         Commands::Monitoring => {
             todo!()
         }
-        Commands::Git => open_git().await,
+        Commands::Git => github().await.unwrap(),
         Commands::YM => open_youtube_music()
             .await
             .expect("failed open youtube music"),
