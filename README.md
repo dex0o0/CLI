@@ -66,4 +66,8 @@ dex dl --file <PATH_TO_TEXT_FILE>
 
 ## License
 
-MIT
+<div>
+
+MIT | [mygithub](https://github.com/dex0o0)
+
+</div>
