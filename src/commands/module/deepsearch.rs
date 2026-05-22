@@ -1,11 +1,12 @@
 use colored::Colorize;
 use rayon::prelude::*;
+use regex::Regex;
 use std::fs;
 use std::path::{Path, PathBuf};
 
 // const BLACKLIST: &[&str] = &["/proc","/sys","dev","/run","var/cache","dosdevices","drive_c"];
 // static BLACKLIST: &[&str] = &[];
-//
+
 pub struct SearchOPT {
     pub blacklist: Vec<String>,
 }
@@ -27,7 +28,7 @@ fn is_blacklisted(path: &Path, blk: &SearchOPT) -> bool {
         .any(|b| path.to_string_lossy().contains(&**b))
 }
 
-pub fn search(path: PathBuf, target: &str, depth: usize, block: Option<String>) {
+pub fn search(path: PathBuf, target: &str, rg: Option<Regex>, depth: usize, block: Option<String>) {
     let mut vec_blk = SearchOPT::new();
 
     if let Some(x) = block {
@@ -37,10 +38,12 @@ pub fn search(path: PathBuf, target: &str, depth: usize, block: Option<String>) 
         }
     }
 
-    if target.is_empty() && depth == 0 {
+    if target.is_empty() && rg.is_none() && depth == 0 {
         normal_search(path);
     } else if !target.is_empty() && depth == 0 {
         deep_search(path, target, &vec_blk);
+    } else if let Some(rg) = rg {
+        deepsearch(path, &rg, &vec_blk);
     } else if depth > 0 {
         deep_search_depth(path, target, depth, depth, &vec_blk);
     }
@@ -63,6 +66,32 @@ fn normal_search(path: PathBuf) {
         println!();
     }
 }
+
+fn deepsearch(path: PathBuf, target: &Regex, blk: &SearchOPT) {
+    let d = 1;
+    if check_err(&path, &d, blk) {
+        return;
+    }
+    if let Ok(entries) = fs::read_dir(&path) {
+        let paths: Vec<PathBuf> = entries.flatten().map(|e| e.path()).collect();
+        paths.into_par_iter().for_each(|path| {
+            if path.is_dir() {
+                deepsearch(path, target, blk);
+            } else if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
+                if target.find(name).is_some() {
+                    let size = fs::metadata(&path).map(|f| f.len()).unwrap_or(0);
+                    println!(
+                        "[{}-{}]{:?}",
+                        "FOUND".green(),
+                        size_human(&size).to_string().yellow(),
+                        path
+                    );
+                }
+            }
+        });
+    }
+}
+
 fn deep_search(path: PathBuf, target: &str, blk: &SearchOPT) {
     let d = 1;
     if check_err(&path, &d, blk) {

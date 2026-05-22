@@ -22,6 +22,7 @@ use clap::{Args, CommandFactory, Parser, Subcommand};
 use clap_complete::{generate, Shell};
 use colored::{self, Colorize};
 use commands::command::*;
+use regex::Regex;
 use std::{env::current_dir, path::PathBuf, str::FromStr};
 
 #[derive(Parser)]
@@ -114,6 +115,8 @@ pub enum Commands {
         #[arg(short = 't', long = "target", help = "target for deepsearch")]
         target: Option<String>,
 
+        #[arg(short = 'r', long = "regex", help = "search with regex for find")]
+        rg: Option<Regex>,
         #[arg(short = 'd', long = "depth", help = "depth search in path")]
         depth: Option<usize>,
 
@@ -260,12 +263,14 @@ async fn main() -> Result<()> {
         Commands::Search {
             path,
             target,
+            rg,
             depth,
             block,
         } => {
             search(
                 path.unwrap_or_else(|| current_dir().expect("i can't get current dir")),
                 &target.unwrap_or_else(|| "".to_string()),
+                rg,
                 depth.unwrap_or(0),
                 block,
             );
