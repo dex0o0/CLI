@@ -129,6 +129,7 @@ pub enum Commands {
 
         #[arg(short = 'r', long = "regex", help = "search with regex for find")]
         rg: Option<Regex>,
+
         #[arg(short = 'd', long = "depth", help = "depth search in path")]
         depth: Option<usize>,
 
