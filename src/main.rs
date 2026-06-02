@@ -46,13 +46,13 @@ pub enum Commands {
     )]
     Status,
 
-    #[command(name = "git", about = "open main page github")]
+    #[command(name = "git", about = "open github web page")]
     Git,
 
-    #[command(name = "gmail", about = "open gmail page")]
+    #[command(name = "gmail", about = "open gmail web page")]
     Gmail,
 
-    #[command(name = "ym", about = "open youtube music")]
+    #[command(name = "ym", about = "open youtube music web page")]
     YM,
 
     #[command(name = "wifi", about = "wifi manager use by pakege 'nmcli'")]
@@ -60,7 +60,19 @@ pub enum Commands {
         #[command(subcommand)]
         action: WifiAction,
     },
-    #[command(name = "config", about = "config user and save data")]
+    #[command(
+        name = "config",
+        about = "config user and save data",
+        long_about = "this command allows you to set configuration variables that control the behavior of dex.\n\n\
+                        Supported Keys:\n\
+                            \t- user.name\t\t:Your profile name\n\
+                            \t- user.email\t\t:Your email for send <<Log/Notifcation/Report>>\n\
+                            \t- user.birthday\t\t:set your birthday for surprise\n",
+        after_help = "Example:\n\
+                      \t$ dex config user.name \"YOUR_NAME\"\n\
+                      \t$ dex config --global user.name \"YOUR_NAME\"\n\
+                      \t$ dex config --global user.email \"example@gmail.com\""
+    )]
     Config(ConfArg),
 
     #[command(name = "monitoring", about = "switch to monitoring mod")]
@@ -140,22 +152,35 @@ pub enum Commands {
 
 #[derive(Args)]
 pub struct ConfArg {
-    #[arg(short = 'G', long = "global")]
+    #[arg(
+        short = 'G',
+        long = "global",
+        help = "Save configuration globally instead of locally"
+    )]
     pub global: bool,
 
+    #[arg(help = "the configuration key (e.g., user.name,user.email,user.birthday)")]
     pub key: String,
+
+    #[arg(help = "the value to assign to the key")]
     pub value: String,
 }
 
 #[derive(Subcommand)]
 pub enum WifiAction {
+    #[command(about = "show enabled wifies")]
     List,
+
+    #[command(about = "connected to wifi with name of wifi")]
     Connect {
         #[arg(value_name = "NETWORK_NAME")]
         name: String,
     },
 
+    #[command(about = "analyze connection")]
     Connection,
+
+    #[command(about = "disconnect of wifies with device_name")]
     Disconnect {
         #[arg(value_name = "NETWORK_DEVICE", default_value = "wlan0")]
         device_name: String,
@@ -217,6 +242,7 @@ async fn main() -> Result<()> {
         Commands::Config(args) => {
             let mut current_user =
                 conf::load_config(args.global).unwrap_or_else(|_| conf::User::empty());
+
             if args.key == "user.email" {
                 match Email::new(args.value.clone()) {
                     Ok(email) => {
@@ -230,12 +256,14 @@ async fn main() -> Result<()> {
                 save_and_report(&current_user, args.global);
             } else if args.key == "user.birthday" || args.key == "user.birth" {
                 let parts: Vec<&str> = args.value.split('-').collect();
+
                 if parts.len() != 3 {
                     eprintln!("Please use format:YYY-Month-DD (e.g., 2000-January-15");
                 } else {
                     let year = parts[0].parse::<u16>().unwrap_or(0);
                     let month = Month::from_str(parts[1]);
                     let day = parts[2].parse::<u8>().unwrap_or(0);
+
                     match month {
                         Ok(m) => match Birthday::new(year, m, day) {
                             Ok(bday) => {
