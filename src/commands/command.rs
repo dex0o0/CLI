@@ -1,15 +1,6 @@
-use std::result::Result::Ok;
-//use core::fmt;
 use anyhow::Result;
-use std::path::PathBuf;
-use std::process::Command;
-//use crate::commands::scan_sys;
-
-// pub fn download(chat:String){
-//     let new = Link::new();
-//     let link = Link::extract(&chat);
-
-// }
+use std::process::{Command, Stdio};
+use std::result::Result::Ok;
 
 pub fn list_network() {
     let out = Command::new("nmcli")
@@ -72,37 +63,14 @@ pub fn connet_to_wifi(name: String) {
 //     Ok(())
 // }
 
-fn current_dir() -> PathBuf {
-    let current_dir = env::current_exe()
-        .expect("Error from get path binery file")
-        .parent()
-        .expect("Error get parent path")
-        .parent()
-        .expect("Error get parent path")
-        .parent()
-        .expect("Error get parent path")
-        .to_path_buf();
-    current_dir
-}
-#[warn(dead_code)]
-fn ch_adress(path: &'static str) -> String {
-    let c_d = current_dir();
-    let mut file_path = String::new();
-    file_path = format!("{}/{}", c_d.display(), path);
-    file_path
-}
-pub async fn open_git() {
-    let current_dir = current_dir();
-    let script = format!("{}/src/scripts/git.sh", current_dir.display());
-    let _ = Command::new("sh").arg(script).spawn();
-}
-
 pub async fn open_gmail() -> Result<()> {
     let _ = Command::new("google-chrome-stable")
         .args([
             "--app=https://accounts.google.com/b/0/AddMailService",
             "--new-window",
         ])
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
         .spawn()?;
     Ok(())
 }
@@ -111,9 +79,11 @@ pub async fn open_youtube_music() -> Result<()> {
     let _ = Command::new("google-chrome-stable")
         .args([
             "--app=https://music.youtube.com/",
-            " --start-fullscreen",
-            " --new-window",
+            "--start-fullscreen",
+            "--new-window",
         ])
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
         .spawn()?;
     Ok(())
 }
@@ -125,15 +95,17 @@ pub async fn github() -> Result<()> {
     let _ = Command::new("google-chrome-stable")
         .args([
             "--app=https://github.com/",
-            " --start-fullscreen",
+            "--start-fullscreen",
             "--new-window",
         ])
-        .spawn();
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .spawn()?;
     Ok(())
 }
 
-#[warn(dead_code)]
+#[allow(dead_code)]
 pub async fn chrome() -> Result<()> {
-    let _ = Command::new("google-chrome-stable").output();
+    let _ = Command::new("google-chrome-stable").spawn()?;
     Ok(())
 }
